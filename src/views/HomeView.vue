@@ -6,25 +6,25 @@ import AlbumCard from '@/components/AlbumCard.vue'
 const alba = ref(null)
 
 onMounted(() => {
-    AlbaService.getAlba()
-    .then((response) => {
-      alba.value = response.data
+  AlbaService.getAlba()
+    .then(albums => {
+      alba.value = albums
     })
-    .catch((error) => {
+    .catch(error => {
       console.log(error)
     })
 })
 </script>
 
 <template>
-    <div class="alba">
-        <AlbumCard v-for="album in alba" :key="album.id" :album="album" />
-    </div>
+  <div class="alba" v-if="alba">
+    <AlbumCard v-for="album in alba" :key="album.id" :album="album" />
+  </div>
 </template>
 
 <style scoped>
 .alba {
     display: block;
-    column-count: 4;
+    column-count: 3;
 }
 </style>

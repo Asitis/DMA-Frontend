@@ -8,9 +8,12 @@ defineProps({
 </script>
 
 <template>
-  <div class="album-card">
+  <div v-if="album" class="album-card">
     <h2>{{ album.title.rendered }}</h2>
-    <span>{{ album.acf.notes }}</span>
+    <p>{{ album.acf.notes }}</p>
+    <p>Artist: {{ album.artist }}</p>
+    <p>Genres: {{ album.genres.join(', ') }}</p>
+    <p>Jaren: {{ album.jaren }}</p>
   </div>
 </template>
 
