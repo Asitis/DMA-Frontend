@@ -6,56 +6,48 @@
       <p>Notes: {{ album.acf.notes }}</p>
       <p>Artist: {{ album.artist }}</p>
       <p>Genres {{ album.genre }}</p> 
-      <p>Genre Name: {{ albumGenreName(album) }}</p>      
+      <p v-if="albumGenreNames">Genre Name: {{ albumGenreNames(album.genre) }}</p>      
       <p>Jaren: {{ album.jaren }}</p>
     </ul>
   </div>
 </template>
 
 <script>
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 
 export default {
   setup() {
     const alba = ref([]);
     const isLoading = ref(false);
-
-    const getGenreName = async (genres, genreId) => {
-      const genre = genres.find((genre) => genre.id === genreId);
-      if (genre) {
+    const albumGenreNames = async (genres) => {
+      const genreNames = [];
+      for (const genre of genres) {
         const response = await fetch(
           `https://www.demaandagavond.nl/wp-json/wp/v2/genre/${genre}`
         );
         const genreData = await response.json();
-        return genreData.name;
-      } else {
-        return null;
+        genreNames.push(genreData.name);
       }
+      return genreNames.length ? genreNames.join(", ") : "Unknown";
     };
 
-    const albumGenreName = computed(() => {
-      return async (album) => {
-        const genreName = await getGenreName(album.genre, 472);
-        return genreName || 'Unknown';
-      };
-    });
-
-    const getPosts = async () => {
+    onMounted(async () => {
       isLoading.value = true;
-      const response = await fetch("https://www.demaandagavond.nl/wp-json/wp/v2/dma_alba");
+
+      const response = await fetch(
+        "https://www.demaandagavond.nl/wp-json/wp/v2/dma_alba"
+      );
+
       const data = await response.json();
+
       alba.value = data;
       isLoading.value = false;
-    };
-
-    onMounted(() => {
-      getPosts();
     });
 
     return {
       alba,
       isLoading,
-      albumGenreName,
+      albumGenreNames,
     };
   },
 };
