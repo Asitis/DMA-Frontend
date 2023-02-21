@@ -13,15 +13,14 @@
 </template>
 
 <script>
+import { ref, computed, onMounted } from 'vue';
+
 export default {
-  data() {
-    return {
-      alba: [],
-      isLoading: false,
-    };
-  },
-  methods: {
-    async getGenreName(genres, genreId) {
+  setup() {
+    const alba = ref([]);
+    const isLoading = ref(false);
+
+    const getGenreName = async (genres, genreId) => {
       const genre = genres.find((genre) => genre.id === genreId);
       if (genre) {
         const response = await fetch(
@@ -32,24 +31,32 @@ export default {
       } else {
         return null;
       }
-    },
-  },
-  computed: {
-    albumGenreName() {
+    };
+
+    const albumGenreName = computed(() => {
       return async (album) => {
-        const genreName = await this.getGenreName(album.genre, 472);
+        const genreName = await getGenreName(album.genre, 472);
         return genreName || 'Unknown';
       };
-    },
-  },
-  mounted() {
-    this.isLoading = true;
-    fetch("https://www.demaandagavond.nl/wp-json/wp/v2/dma_alba")
-      .then((response) => response.json())
-      .then((data) => {
-        this.alba = data;
-        this.isLoading = false;
-      });
+    });
+
+    const getPosts = async () => {
+      isLoading.value = true;
+      const response = await fetch("https://www.demaandagavond.nl/wp-json/wp/v2/dma_alba");
+      const data = await response.json();
+      alba.value = data;
+      isLoading.value = false;
+    };
+
+    onMounted(() => {
+      getPosts();
+    });
+
+    return {
+      alba,
+      isLoading,
+      albumGenreName,
+    };
   },
 };
 </script>
