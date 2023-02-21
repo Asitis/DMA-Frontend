@@ -19,18 +19,24 @@ export default {
                         return response.data.name
                     })
                 })
-            return Promise.all(genrePromises).then(genres => {
-                album.genres = genres
-                return album
+                const artistId = album.artist
+                const artistPromise = apiClient.get(`/artist/${artistId}`).then(response => {
+                    return response.data.name
+                })
+                const yearId = album.jaren
+                const yearPromise = apiClient.get(`/jaren/${yearId}`).then(response => {
+                    return response.data.name
+                })
+                return Promise.all([Promise.all(genrePromises), artistPromise, yearPromise]).then(([genres, artist, jaren]) => {
+                    album.genres = genres
+                    album.jaren = jaren
+                    album.artist = artist
+                    return album
+                })
             })
-        })
-        console.log(albumPromises)
         return Promise.all(albumPromises)
         })
-    },
-    getGenres(id) {
-        return apiClient.get('/genre/' + id);
-    },
+    }
 }
 
 //https://www.demaandagavond.nl/wp-json/wp/v2/genre/471
