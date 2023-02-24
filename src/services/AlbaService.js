@@ -28,9 +28,10 @@ export default {
 
                 // Get Artists
                 const artistId = album.artist
-                const artistPromise = apiClient.get(`/artist/${artistId}`).then(response => {
-                    return response.data.name
-                })
+                const artistPromise = Array.isArray(artistId)
+                  ? Promise.all(artistId.map(id => apiClient.get(`/artist/${id}`).then(response => response.data.name)))
+                    .then(artistNames => artistNames.join(', '))
+                  : apiClient.get(`/artist/${artistId}`).then(response => response.data.name)
 
                 // Get Years
                 const yearId = album.jaren
@@ -57,5 +58,3 @@ export default {
         })
     }
 }
-
-//https://www.demaandagavond.nl/wp-json/wp/v2/genre/471

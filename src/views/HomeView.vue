@@ -1,7 +1,7 @@
 <template>
   <div class="alba" ref="albumList">
     <AlbumCard v-for="album in alba" :key="album.id" :album="album" />
-    <div ref="loadMore" class="load-more">~~</div>
+    <div ref="loadMore" class="load-more"></div>
   </div>
 </template>
 
@@ -66,8 +66,5 @@ function observeLoadMore() {
 .load-more {
   min-height: 1px;
   background-color: transparent;
-  clear: both;
-display: block;
-width: 100%;
 }
 </style>

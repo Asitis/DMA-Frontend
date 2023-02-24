@@ -9,9 +9,9 @@ defineProps({
 
 <template>
   <album v-if="album" class="album-card">
+    <img v-if="album.featuredImageUrl" :src="album.featuredImageUrl" alt="Album cover" class="cover">
     <album-content>
-      <img v-if="album.featuredImageUrl" :src="album.featuredImageUrl" alt="Album cover" class="cover">
-      <h2>{{ album.title.rendered }}</h2>
+      <h2 v-html="album.title.rendered"></h2>
       <p>{{ album.acf.notes }}</p>
       <p>Artist: {{ album.artist }}</p>
       <p>Genres: {{ album.genres.join(', ') }}</p>
@@ -30,7 +30,7 @@ album {
   color: #fff;
   margin-bottom: 18px;
   box-sizing: border-box;
-  transition: transform .4s;
+  transition: transform .2s;
 }
 album-content {
   display: flex;
@@ -38,6 +38,7 @@ album-content {
   border: 1px solid #39495c;
   border-top: 0px;
   height: 100%;
+  padding: 15px;
 }
 img.cover { width: 100%; }
 album:hover {
