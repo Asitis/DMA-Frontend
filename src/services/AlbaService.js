@@ -21,11 +21,14 @@ export default {
                 // Get Genres
                 const genreIds = album.genre
                 const genrePromises = genreIds.map(id => {
-                    return apiClient.get(`/genre/${id}`).then(response => {
-                        return response.data.name
-                    })
-                })
-
+                  return apiClient.get(`/genre/${id}`).then(response => {
+                    const genreName = response.data.name;
+                    const div = document.createElement('div');
+                    div.innerHTML = genreName;
+                    return div.textContent;
+                  });
+                });
+                
                 // Get Artists
                 const artistId = album.artist
                 const artistPromise = Array.isArray(artistId)

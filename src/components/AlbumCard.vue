@@ -12,37 +12,14 @@ defineProps({
     <img v-if="album.featuredImageUrl" :src="album.featuredImageUrl" alt="Album cover" class="cover">
     <album-content>
       <h2 v-html="album.title.rendered"></h2>
+      <artist>{{ album.artist }}</artist>
+      <year>{{ album.jaren }}</year>
       <p>{{ album.acf.notes }}</p>
-      <p>Artist: {{ album.artist }}</p>
-      <p>Genres: {{ album.genres.join(', ') }}</p>
-      <p>Jaren: {{ album.jaren }}</p>
+      <p>{{ album.genres.join(', ') }}</p>
     </album-content>
   </album>
 </template>
 
-<style scoped>
-album {
-  display: flex;
-  flex-direction: column;
-  padding: 5px;
-  width: 25%;
-  cursor: pointer;
-  color: #fff;
-  margin-bottom: 18px;
-  box-sizing: border-box;
-  transition: transform .2s;
-}
-album-content {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #39495c;
-  border-top: 0px;
-  height: 100%;
-  padding: 15px;
-}
-img.cover { width: 100%; }
-album:hover {
-  transform: scale(1.05);
-  box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.2);
-}
+<style scoped lang="less">
+@import '@/assets/album.less';
 </style>
