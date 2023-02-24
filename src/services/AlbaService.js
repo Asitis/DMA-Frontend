@@ -10,8 +10,13 @@ const apiClient = axios.create({
 })
 
 export default {
-    getAlba() {
-        return apiClient.get('/dma_alba').then(response => {
+    getAlba(page = 1, perPage = 10) {
+        return apiClient.get('/dma_alba', {
+            params: {
+              page: page,
+              per_page: perPage
+            }
+        }).then(response => {
             const albumPromises = response.data.map(album => {
                 // Get Genres
                 const genreIds = album.genre

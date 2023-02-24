@@ -20,7 +20,7 @@ import { ref, onMounted } from 'vue';
 
 <style>
 body {
-  background:#131920;
+  background: #0f1113;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
