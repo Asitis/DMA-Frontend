@@ -28,19 +28,30 @@ export default {
                     return div.textContent;
                   });
                 });
-                
+
                 // Get Artists
                 const artistId = album.artist
                 const artistPromise = Array.isArray(artistId)
-                  ? Promise.all(artistId.map(id => apiClient.get(`/artist/${id}`).then(response => response.data.name)))
+                    ? Promise.all(artistId.map(id => apiClient.get(`/artist/${id}`).then(response => {
+                        const artistName = response.data.name;
+                        const div = document.createElement('div');
+                        div.innerHTML = artistName;
+                        return div.textContent;
+                    })))
                     .then(artistNames => artistNames.join(', '))
-                  : apiClient.get(`/artist/${artistId}`).then(response => response.data.name)
-
+                    : apiClient.get(`/artist/${artistId}`).then(response => {
+                        const artistName = response.data.name;
+                        const div = document.createElement('div');
+                        div.innerHTML = artistName;
+                        return div.textContent;
+                    });
+    
                 // Get Years
                 const yearId = album.jaren
-                const yearPromise = apiClient.get(`/jaren/${yearId}`).then(response => {
-                    return response.data.name
-                })
+                const yearPromise = Array.isArray(yearId)
+                    ? Promise.all(yearId.map(id => apiClient.get(`/jaren/${id}`).then(response => response.data.name)))
+                    .then(yearNames => yearNames.join(', '))
+                    : apiClient.get(`/jaren/${yearId}`).then(response => response.data.name)
 
                 // Get Images
                 const featuredImageId = album.featured_media
@@ -58,6 +69,16 @@ export default {
                 })
             })
         return Promise.all(albumPromises)
+        })
+    },
+
+    getArtists() {
+        return apiClient.get('/artist', {
+            params: {
+                per_page: 100 // Limit the number of results to 100
+            }
+        }).then(response => {
+            return response.data.map(artist => artist.name)
         })
     }
 }

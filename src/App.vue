@@ -1,6 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { ref, onMounted } from 'vue';
+import ArtistFilter from '@/components/ArtistFilter.vue'
 </script>
 
 <template>
@@ -13,8 +14,11 @@ import { ref, onMounted } from 'vue';
         </nav>
       </div>
     </header>
-    <h1>DMA Vue Test</h1>
     <RouterView />
+    <footer>
+      <img src="@/assets/logo.svg">
+      <ArtistFilter />
+    </footer>
   </div>
 </template>
 
