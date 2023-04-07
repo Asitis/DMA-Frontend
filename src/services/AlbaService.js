@@ -10,7 +10,7 @@ const apiClient = axios.create({
 })
 
 export default {
-    getAlba(page = 1, perPage = 10) {
+    getAlba(page = 1, perPage = 15) {
         return apiClient.get('/dma_alba', {
             params: {
               page: page,
@@ -80,5 +80,38 @@ export default {
         }).then(response => {
             return response.data.map(artist => artist.name)
         })
+    },
+
+    getAlbumsByArtist(artistName) {
+        return apiClient.get('/artist', {
+          params: {
+            search: artistName,
+            per_page: 1,
+          },
+        }).then((response) => {
+          const artistId = response.data[0]?.id;
+          if (!artistId) {
+            throw new Error(`No artist found with name "${artistName}"`);
+          }
+          return apiClient
+            .get('/dma_alba', {
+              params: {
+                artist: artistId,
+              },
+            })
+            .then((response) => {
+              return response.data.map((album) => {
+                return {
+                  id: album.id,
+                  title: album.title.rendered,
+                  content: album.content.rendered,
+                  imageUrl: album.featured_image_url,
+                  jaren: album.jaren,
+                  artist: album.artist,
+                  genres: album.genres,
+                };
+              });
+            });
+        });
     }
 }

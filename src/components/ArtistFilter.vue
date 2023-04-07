@@ -7,7 +7,6 @@
           v-model="search"
           placeholder="Search artist"
           @focus="isDropdownOpen = true"
-          @blur="isDropdownOpen = false"
         />
         <i class="fas fa-search"></i>
       </div>
@@ -18,7 +17,7 @@
           :key="index"
           @click="selectArtist(artist)"
         >
-          {{ artist }}
+          {{ artist }}, {{ index }}
         </div>
       </div>
     </div>
@@ -53,6 +52,7 @@ export default {
       this.isDropdownOpen = !this.isDropdownOpen;
     },
     selectArtist(artist) {
+      console.log('selectArtist fired');
       this.search = artist;
       this.isDropdownOpen = false;
       this.$emit('artist-selected', artist);

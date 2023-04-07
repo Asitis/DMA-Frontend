@@ -1,7 +1,19 @@
-<script setup>
+<script>
 import { RouterLink, RouterView } from 'vue-router'
 import { ref, onMounted } from 'vue';
-import ArtistFilter from '@/components/ArtistFilter.vue'
+import ArtistFilter from '@/components/ArtistFilter.vue';
+
+export default {
+  components: {
+    ArtistFilter,
+  },
+  methods: {
+    handleArtistSelected(artist) {
+      console.log('clicked');
+      console.log(artist); // do something with the selected artist
+    },
+  },
+};
 </script>
 
 <template>
@@ -17,7 +29,7 @@ import ArtistFilter from '@/components/ArtistFilter.vue'
     <RouterView />
     <footer>
       <img src="@/assets/logo.svg">
-      <ArtistFilter />
+      <ArtistFilter @artist-selected="handleArtistSelected" />
     </footer>
   </div>
 </template>
