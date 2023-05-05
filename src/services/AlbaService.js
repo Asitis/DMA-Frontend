@@ -100,17 +100,58 @@ export default {
               },
             })
             .then((response) => {
-              return response.data.map((album) => {
-                return {
-                  id: album.id,
-                  title: album.title.rendered,
-                  content: album.content.rendered,
-                  imageUrl: album.featured_image_url,
-                  jaren: album.jaren,
-                  artist: album.artist,
-                  genres: album.genres,
-                };
-              });
+              const albumPromises = response.data.map(album => {
+                // Get Genres
+                const genreIds = album.genre
+                const genrePromises = genreIds.map(id => {
+                  return apiClient.get(`/genre/${id}`).then(response => {
+                    const genreName = response.data.name;
+                    const div = document.createElement('div');
+                    div.innerHTML = genreName;
+                    return div.textContent;
+                  });
+                });
+
+                // Get Artists
+                const artistId = album.artist
+                const artistPromise = Array.isArray(artistId)
+                    ? Promise.all(artistId.map(id => apiClient.get(`/artist/${id}`).then(response => {
+                        const artistName = response.data.name;
+                        const div = document.createElement('div');
+                        div.innerHTML = artistName;
+                        return div.textContent;
+                    })))
+                    .then(artistNames => artistNames.join(', '))
+                    : apiClient.get(`/artist/${artistId}`).then(response => {
+                        const artistName = response.data.name;
+                        const div = document.createElement('div');
+                        div.innerHTML = artistName;
+                        return div.textContent;
+                    });
+    
+                // Get Years
+                const yearId = album.jaren
+                const yearPromise = Array.isArray(yearId)
+                    ? Promise.all(yearId.map(id => apiClient.get(`/jaren/${id}`).then(response => response.data.name)))
+                    .then(yearNames => yearNames.join(', '))
+                    : apiClient.get(`/jaren/${yearId}`).then(response => response.data.name)
+
+                // Get Images
+                const featuredImageId = album.featured_media
+                const featuredImagePromise = featuredImageId
+                  ? apiClient.get(`/media/${featuredImageId}`).then(response => {
+                    return response.data.source_url
+                  })
+                  : Promise.resolve(null)
+                return Promise.all([Promise.all(genrePromises), artistPromise, yearPromise, featuredImagePromise]).then(([genres, artist, jaren, featuredImageUrl]) => {
+                    album.genres = genres
+                    album.jaren = jaren
+                    album.artist = artist
+                    album.featuredImageUrl = featuredImageUrl
+                    return album
+                })
+            })
+            return Promise.all(albumPromises)
             });
         });
     }

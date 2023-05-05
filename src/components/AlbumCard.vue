@@ -8,16 +8,16 @@ defineProps({
 </script>
 
 <template>
-  <album v-if="album" class="album-card">
+  <div v-if="album" class="album-card">
     <img v-if="album.featuredImageUrl" :src="album.featuredImageUrl" alt="Album cover" class="cover">
-    <album-content>
+    <div class="album-content">
       <h2 v-html="album.title.rendered"></h2>
-      <artist>{{ album.artist }}</artist>
-      <year>{{ album.jaren }}</year>
+      <div class="artist">{{ album.artist }}</div>
+      <div class="year">{{ album.jaren }}</div>
       <p v-if="album.acf">{{ album.acf.notes }}</p>
       <p v-if="album.genres">{{ album.genres.join(', ') }}</p>
-    </album-content>
-  </album>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="less">
