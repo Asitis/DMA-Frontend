@@ -1,11 +1,12 @@
 <template>
-  <div>
-    <h1>{{ artist }}</h1>
+  <div class="alba" ref="albumList">
+        <div class="intro-card artist">
+      <h1>{{ artist }}</h1>
+    </div>
+
     <AlbumCard v-for="album in alba" :key="album.id" :album="album" />
   </div>
 </template>
-  <!-- if I load the notes here, nothing happens at all -->
-  <!-- :notes="album.acf.notes" -->
 
 <script>
 import AlbaService from '@/services/AlbaService.js';
