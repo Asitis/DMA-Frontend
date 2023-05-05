@@ -17,7 +17,7 @@
           :key="index"
           @click="selectArtist(artist)"
         >
-          {{ artist }}, {{ index }}
+          {{ artist }}
         </div>
       </div>
     </div>

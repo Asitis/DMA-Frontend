@@ -63,7 +63,7 @@ function observeLoadMore() {
 <style>
 #app {
   width: 80%;
-  margin: 0 auto;
+  margin: 50px auto 220px;
 }
 .alba {
     display: flex;

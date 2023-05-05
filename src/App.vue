@@ -18,17 +18,9 @@ export default {
 
 <template>
   <div id="layout">
-    <header>
-      <div class="wrapper">
-        <nav>
-          <RouterLink to="/">Home</RouterLink> |
-          <RouterLink to="/artist">Artist</RouterLink>
-        </nav>
-      </div>
-    </header>
     <RouterView />
     <footer>
-      <img src="@/assets/logo.svg">
+      <RouterLink to="/"><img src="@/assets/logo.svg" class="logo"></RouterLink>
       <ArtistFilter @artist-selected="handleArtistSelected" />
     </footer>
   </div>
