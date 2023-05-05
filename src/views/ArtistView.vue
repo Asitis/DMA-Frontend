@@ -1,26 +1,37 @@
 <template>
   <div>
     <h1>{{ artist }}</h1>
-    <AlbumCard v-for="album in alba" :key="album.id" :album="album" />
+    <AlbumCard
+      v-for="album in alba"
+      :key="album.id"
+      :album="album"
+      :artist="album.artist"
+      :year="album.jaren"
+      :genres="album.genres"
+    />
   </div>
 </template>
+  <!-- if I load the notes here, nothing happens at all -->
+  <!-- :notes="album.acf.notes" -->
 
 <script>
 import AlbaService from '@/services/AlbaService.js';
+import AlbumCard from '@/components/AlbumCard.vue';
 
 export default {
+  components: {
+    AlbumCard
+  },
   data() {
     return {
       artist: null,
-      albums: [],
-    };
+      alba: []
+    }
   },
   async created() {
     const { name } = this.$route.params;
     this.artist = name;
-    const alba = await AlbaService.getAlbumsByArtist(name);
-    this.alba = await Promise.all(alba);
-    console.log(alba)
+    this.alba = await AlbaService.getAlbumsByArtist(name);
   }
-};
+}
 </script>
