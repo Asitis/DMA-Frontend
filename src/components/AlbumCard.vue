@@ -14,6 +14,7 @@ defineProps({
       <h2 v-html="album.title.rendered"></h2>
       <div class="artist">{{ album.artist }}</div>
       <div class="year">{{ album.jaren }}</div>
+      <div class="labels">{{ album.labels }}</div>
       <p v-if="album.acf">{{ album.acf.notes }}</p>
       <p v-if="album.genres">{{ album.genres.join(', ') }}</p>
     </div>

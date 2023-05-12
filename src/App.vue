@@ -9,8 +9,8 @@ export default {
   },
   methods: {
     handleArtistSelected(artist) {
-      console.log('clicked');
-      console.log(artist); // do something with the selected artist
+      // console.log('clicked');
+      // console.log(artist); // do something with the selected artist
     },
   },
 };
@@ -26,6 +26,6 @@ export default {
   </div>
 </template>
 
-<style>
+<style lang="less">
 @import '@/assets/style.less';
 </style>

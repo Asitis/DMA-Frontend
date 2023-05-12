@@ -74,26 +74,33 @@ body { background: #16191c; }
     flex-direction: column;
     width: calc(50% - 10px);
     margin: 5px;
-}
-.intro-card h1 {
-    font-family: 'Roboto Slab';
-    font-weight: 900;
-    line-height: 50px;
-    margin: 0 0 5px 0;
-    padding: 0;
-    color: #fff;
-    text-transform: uppercase;
-    font-size: 65px;
-    text-align: left;
-}
-.intro-card p {
-    text-align: left;
-}
-.intro-card.artist {
-    width: calc(25% - 10px);
-}
-.intro-card.artist h1 {
-    font-size: 30px;
+    color: #a2a2a2;
+
+    h1 {
+        font-family: 'Roboto Slab';
+        font-weight: 900;
+        line-height: 50px;
+        margin: 0 0 5px 0;
+        padding: 0;
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 65px;
+        text-align: left;
+    }
+    h3 { 
+        text-align: left;
+        color: #fff;
+        font-size: 25px;
+     }
+    p { 
+        text-align: left;
+        padding-right: 50px;
+     }
+    &.artist {
+        width: calc(25% - 10px);
+
+        h1 { font-size: 30px; }
+    }
 }
 nav { 
     padding: 30px;
@@ -112,5 +119,6 @@ footer {
     display: flex;
     flex-flow: row wrap;
     align-content: flex-start;
+
+    .logo { padding-right: 50px;}
 }
-footer .logo { padding-right: 50px;}

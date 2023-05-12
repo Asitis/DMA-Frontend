@@ -53,6 +53,13 @@ export default {
                     .then(yearNames => yearNames.join(', '))
                     : apiClient.get(`/jaren/${yearId}`).then(response => response.data.name)
 
+                // Get Labels
+                const labelId = album.labels
+                const labelPromise = Array.isArray(labelId)
+                    ? Promise.all(labelId.map(id => apiClient.get(`/labels/${id}`).then(response => response.data.name)))
+                    .then(labelNames => labelNames.join(', '))
+                    : apiClient.get(`/labels/${labelId}`).then(response => response.data.name)
+
                 // Get Images
                 const featuredImageId = album.featured_media
                 const featuredImagePromise = featuredImageId
@@ -60,9 +67,10 @@ export default {
                     return response.data.source_url
                   })
                   : Promise.resolve(null)
-                return Promise.all([Promise.all(genrePromises), artistPromise, yearPromise, featuredImagePromise]).then(([genres, artist, jaren, featuredImageUrl]) => {
+                return Promise.all([Promise.all(genrePromises), artistPromise, yearPromise, labelPromise, featuredImagePromise]).then(([genres, artist, jaren, labels, featuredImageUrl]) => {
                     album.genres = genres
                     album.jaren = jaren
+                    album.labels = labels
                     album.artist = artist
                     album.featuredImageUrl = featuredImageUrl
                     return album
@@ -137,6 +145,13 @@ export default {
                 .then(yearNames => yearNames.join(', '))
                 : apiClient.get(`/jaren/${yearId}`).then(response => response.data.name)
 
+            // Get Labels
+            const labelId = album.labels
+            const labelPromise = Array.isArray(labelId)
+                ? Promise.all(labelId.map(id => apiClient.get(`/labels/${id}`).then(response => response.data.name)))
+                .then(labelNames => labelNames.join(', '))
+                : apiClient.get(`/labels/${labelId}`).then(response => response.data.name)
+
             // Get Images
             const featuredImageId = album.featured_media
             const featuredImagePromise = featuredImageId
@@ -144,9 +159,10 @@ export default {
                 return response.data.source_url
               })
               : Promise.resolve(null)
-            return Promise.all([Promise.all(genrePromises), artistPromise, yearPromise, featuredImagePromise]).then(([genres, artist, jaren, featuredImageUrl]) => {
+            return Promise.all([Promise.all(genrePromises), artistPromise, yearPromise, labelPromise, featuredImagePromise]).then(([genres, artist, jaren, labels, featuredImageUrl]) => {
                 album.genres = genres
                 album.jaren = jaren
+                album.labels = labels
                 album.artist = artist
                 album.featuredImageUrl = featuredImageUrl
                 return album
