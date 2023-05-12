@@ -13,10 +13,12 @@ defineProps({
     <div class="album-content">
       <h2 v-html="album.title.rendered"></h2>
       <div class="artist">{{ album.artist }}</div>
-      <div class="year">{{ album.jaren }}</div>
-      <div class="labels">{{ album.labels }}</div>
       <p v-if="album.acf">{{ album.acf.notes }}</p>
-      <p v-if="album.genres">{{ album.genres.join(', ') }}</p>
+    </div>
+    <div class="card-end">
+      <div class="year"><label>Year:</label> {{ album.jaren }}</div>
+      <div class="labels"><label>Label:</label> {{ album.labels }}</div>
+      <div v-if="album.genres"><label>Genres:</label> {{ album.genres.join(', ') }}</div>
     </div>
   </div>
 </template>
