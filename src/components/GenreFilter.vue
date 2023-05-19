@@ -1,11 +1,11 @@
 <template>
-  <div class="artist-filter filter">
+  <div class="genre-filter filter">
     <div class="dropdown">
       <div class="dropdown-input" @click="toggleDropdown">
         <input
           type="text"
           v-model="search"
-          placeholder="Search artist"
+          placeholder="Search genres"
           @focus="isDropdownOpen = true"
         />
         <i class="fas fa-search"></i>
@@ -13,11 +13,11 @@
       <div class="dropdown-menu" v-if="isDropdownOpen">
         <div
           class="dropdown-item"
-          v-for="(artist, index) in filteredArtists"
+          v-for="(genre, index) in filteredGenres"
           :key="index"
-          @click="selectArtist(artist)"
+          @click="selectGenre(genre)"
         >
-          {{ artist }}
+          {{ genre }}
         </div>
       </div>
     </div>
@@ -30,20 +30,20 @@ import AlbaService from '@/services/AlbaService.js';
 export default {
   data() {
     return {
-      artists: [],
+      genres: [],
       search: '',
       isDropdownOpen: false,
     };
   },
   created() {
-    AlbaService.getArtists().then((response) => {
-      this.artists = response;
+    AlbaService.getGenres().then((response) => {
+      this.genres = response;
     });
   },
   computed: {
-    filteredArtists() {
-      return this.artists.filter((artist) => {
-        return artist.toLowerCase().indexOf(this.search.toLowerCase()) !== -1;
+    filteredGenres() {
+      return this.genres.filter((genre) => {
+        return genre.toLowerCase().indexOf(this.search.toLowerCase()) !== -1;
       });
     },
   },
@@ -51,12 +51,11 @@ export default {
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen;
     },
-    selectArtist(artist) {
-      console.log('selectArtist fired');
-      this.search = artist;
+    selectGenre(genre) {
+      this.search = genre;
       this.isDropdownOpen = false;
-      this.$emit('artist-selected', artist);
-      this.$router.push({ name: 'Artist', params: { name: artist }});
+      this.$emit('genre-selected', genre);
+      this.$router.push({ name: 'Genre', params: { name: genre }});
     },
   },
 };

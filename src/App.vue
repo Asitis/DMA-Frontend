@@ -2,16 +2,19 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { ref, onMounted } from 'vue';
 import ArtistFilter from '@/components/ArtistFilter.vue';
+import GenreFilter from '@/components/GenreFilter.vue';
+import LabelFilter from '@/components/LabelFilter.vue';
 
 export default {
   components: {
     ArtistFilter,
+    GenreFilter,
+    LabelFilter,
   },
   methods: {
-    handleArtistSelected(artist) {
-      // console.log('clicked');
-      // console.log(artist); // do something with the selected artist
-    },
+    handleArtistSelected(artist) {},
+    handleGenreSelected(genre) {},
+    handleLabelSelected(label) {},
   },
 };
 </script>
@@ -22,6 +25,8 @@ export default {
     <footer>
       <RouterLink to="/"><img src="@/assets/logo.svg" class="logo"></RouterLink>
       <ArtistFilter @artist-selected="handleArtistSelected" />
+      <GenreFilter @genre-selected="handleGenreSelected" />
+      <LabelFilter @label-selected="handleLabelSelected" />
     </footer>
   </div>
 </template>

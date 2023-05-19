@@ -1,11 +1,11 @@
 <template>
-  <div class="artist-filter filter">
+  <div class="label-filter filter">
     <div class="dropdown">
       <div class="dropdown-input" @click="toggleDropdown">
         <input
           type="text"
           v-model="search"
-          placeholder="Search artist"
+          placeholder="Search labels"
           @focus="isDropdownOpen = true"
         />
         <i class="fas fa-search"></i>
@@ -13,11 +13,11 @@
       <div class="dropdown-menu" v-if="isDropdownOpen">
         <div
           class="dropdown-item"
-          v-for="(artist, index) in filteredArtists"
+          v-for="(label, index) in filteredLabels"
           :key="index"
-          @click="selectArtist(artist)"
+          @click="selectLabel(label)"
         >
-          {{ artist }}
+          {{ label }}
         </div>
       </div>
     </div>
@@ -30,20 +30,20 @@ import AlbaService from '@/services/AlbaService.js';
 export default {
   data() {
     return {
-      artists: [],
+      labels: [],
       search: '',
       isDropdownOpen: false,
     };
   },
   created() {
-    AlbaService.getArtists().then((response) => {
-      this.artists = response;
+    AlbaService.getLabels().then((response) => {
+      this.labels = response;
     });
   },
   computed: {
-    filteredArtists() {
-      return this.artists.filter((artist) => {
-        return artist.toLowerCase().indexOf(this.search.toLowerCase()) !== -1;
+    filteredLabels() {
+      return this.labels.filter((label) => {
+        return label.toLowerCase().indexOf(this.search.toLowerCase()) !== -1;
       });
     },
   },
@@ -51,12 +51,11 @@ export default {
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen;
     },
-    selectArtist(artist) {
-      console.log('selectArtist fired');
-      this.search = artist;
+    selectLabel(label) {
+      this.search = label;
       this.isDropdownOpen = false;
-      this.$emit('artist-selected', artist);
-      this.$router.push({ name: 'Artist', params: { name: artist }});
+      this.$emit('label-selected', label);
+      this.$router.push({ name: 'Label', params: { name: label }});
     },
   },
 };
