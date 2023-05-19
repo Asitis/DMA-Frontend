@@ -9,7 +9,9 @@ defineProps({
 
 <template>
   <div v-if="album" class="album-card">
-    <img v-if="album.featuredImageUrl" :src="album.featuredImageUrl" alt="Album cover" class="cover">
+    <div class="cover-container">
+      <img v-if="album.featuredImageUrl" :src="album.featuredImageUrl" alt="Album cover" class="cover">
+    </div>
     <div class="album-content">
       <h2 v-html="album.title.rendered"></h2>
       <div class="artist">{{ album.artist }}</div>
