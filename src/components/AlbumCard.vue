@@ -36,7 +36,7 @@ const formatData = (data) => {
 };
 
 const artistDisplay = computed(() => formatData(props.album.artist));
-const yearDisplay = computed(() => formatData(props.album.year));
+const yearDisplay = computed(() => formatData(props.album.jaren));
 const labelDisplay = computed(() => formatData(props.album.labels));
 const genresDisplay = computed(() => formatData(props.album.genres));
 </script>

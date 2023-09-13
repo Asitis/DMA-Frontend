@@ -87,6 +87,15 @@ export default {
         return response.data.map(label => label.name)
     })
   },
+  getYears() {
+    return apiClient.get('/jaren', {
+        params: {
+            per_page: 100 // Limit the number of results to 100
+        }
+    }).then(response => {
+        return response.data.map(year => year.name)
+    })
+  },
   async getAlbumsByArtist(artistName) {
     const artistResponse = await apiClient.get('/artist', {
       params: {
@@ -230,6 +239,55 @@ export default {
         label: {
           name: label.name,
           description: label.description,
+        },
+        alba: alba,
+      };
+  },
+  async getAlbumsByYear(yearName) {
+    const yearResponse = await apiClient.get('/jaren', {
+      params: {
+          search: yearName,
+          per_page: 1,
+        },
+      });
+  
+      const year = yearResponse.data[0];
+      if (!year) {
+        throw new Error(`No year found with name "${yearName}"`);
+      }
+  
+      const albumsResponse = await apiClient.get('/dma_alba', {
+        params: {
+          jaren: year.id,
+        },
+      });
+  
+      const albumPromises = albumsResponse.data.map(async (album) => {
+        const [genres, artist, jaren, labels, featuredImageUrl] = await Promise.all([
+          fetchAlbumData(album, 'genre'),
+          fetchAlbumData(album, 'artist'),
+          fetchAlbumData(album, 'jaren'),
+          fetchAlbumData(album, 'labels'),
+          album.featured_media
+            ? apiClient.get(`/media/${album.featured_media}`).then((response) => response.data.source_url)
+            : null,
+        ]);
+  
+        album.genres = genres;
+        album.jaren = jaren;
+        album.labels = labels;
+        album.artist = artist;
+        album.featuredImageUrl = featuredImageUrl;
+  
+        return album;
+      });
+  
+      const alba = await Promise.all(albumPromises);
+  
+      return {
+        year: {
+          name: year.name,
+          description: year.description,
         },
         alba: alba,
       };

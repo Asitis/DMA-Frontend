@@ -4,17 +4,20 @@ import { ref, onMounted } from 'vue';
 import ArtistFilter from '@/components/ArtistFilter.vue';
 import GenreFilter from '@/components/GenreFilter.vue';
 import LabelFilter from '@/components/LabelFilter.vue';
+import YearFilter from '@/components/YearFilter.vue';
 
 export default {
   components: {
     ArtistFilter,
     GenreFilter,
     LabelFilter,
+    YearFilter,
   },
   methods: {
     handleArtistSelected(artist) {},
     handleGenreSelected(genre) {},
     handleLabelSelected(label) {},
+    handleYearSelected(year) {},
   },
 };
 </script>
@@ -27,6 +30,7 @@ export default {
       <ArtistFilter @artist-selected="handleArtistSelected" />
       <GenreFilter @genre-selected="handleGenreSelected" />
       <LabelFilter @label-selected="handleLabelSelected" />
+      <YearFilter @year-selected="handleYearSelected" />
     </footer>
   </div>
 </template>
