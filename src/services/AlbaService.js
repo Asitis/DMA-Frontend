@@ -7,7 +7,13 @@ const apiClient = axios.create({
         Accept: 'application/json',
         'Content-Type': 'application/json'
     }
-})
+});
+// apiClient.interceptors.request.use((config) => {
+//   console.log(`Axios is calling URL: ${config.baseURL}${config.url} with parameters:`, config.params);
+//   return config;
+// }, (error) => {
+//   return Promise.reject(error);
+// });
 
 // Helper function to retrieve additional album data
 async function fetchAlbumData(album, endpoint) {
@@ -194,7 +200,7 @@ export default {
 
       const albumsResponse = await apiClient.get('/dma_alba', {
         params: {
-          label: label.id,
+          labels: label.id,
         },
       });
   
