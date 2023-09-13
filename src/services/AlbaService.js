@@ -130,184 +130,102 @@ export default {
       alba: alba,
     };
   },
-  getAlbumsByGenre(genreName) {
-    return apiClient.get('/genre', {
+  async getAlbumsByGenre(genreName) {
+    const genreResponse = await apiClient.get('/genre', {
       params: {
-        search: genreName,
-        per_page: 1,
-      },
-    }).then((response) => {
-      const genre = response.data[0];
+          search: genreName,
+          per_page: 1,
+        },
+      });
+  
+      const genre = genreResponse.data[0];
       if (!genre) {
         throw new Error(`No genre found with name "${genreName}"`);
       }
-
-      return apiClient
-        .get('/dma_alba', {
-          params: {
-            genre: genre.id,
-          },
-        })
-        .then((response) => {
-          const albumPromises = response.data.map(album => {
-            // Get Genres
-            const genreIds = album.genre
-            const genrePromises = genreIds.map(id => {
-              return apiClient.get(`/genre/${id}`).then(response => {
-                const genreName = response.data.name;
-                const div = document.createElement('div');
-                div.innerHTML = genreName;
-                return div.textContent;
-              });
-            });
-
-            // Get Artists
-            const artistId = album.artist
-            const artistPromise = Array.isArray(artistId)
-                ? Promise.all(artistId.map(id => apiClient.get(`/artist/${id}`).then(response => {
-                    const artistName = response.data.name;
-                    const div = document.createElement('div');
-                    div.innerHTML = artistName;
-                    return div.textContent;
-                })))
-                .then(artistNames => artistNames.join(', '))
-                : apiClient.get(`/artist/${artistId}`).then(response => {
-                    const artistName = response.data.name;
-                    const div = document.createElement('div');
-                    div.innerHTML = artistName;
-                    return div.textContent;
-                });
-
-            // Get Years
-            const yearId = album.jaren
-            const yearPromise = Array.isArray(yearId)
-                ? Promise.all(yearId.map(id => apiClient.get(`/jaren/${id}`).then(response => response.data.name)))
-                .then(yearNames => yearNames.join(', '))
-                : apiClient.get(`/jaren/${yearId}`).then(response => response.data.name)
-
-            // Get Labels
-            const labelId = album.labels
-            const labelPromise = Array.isArray(labelId)
-                ? Promise.all(labelId.map(id => apiClient.get(`/labels/${id}`).then(response => response.data.name)))
-                .then(labelNames => labelNames.join(', '))
-                : apiClient.get(`/labels/${labelId}`).then(response => response.data.name)
-
-            // Get Images
-            const featuredImageId = album.featured_media
-            const featuredImagePromise = featuredImageId
-              ? apiClient.get(`/media/${featuredImageId}`).then(response => {
-                return response.data.source_url
-              })
-              : Promise.resolve(null)
-            return Promise.all([Promise.all(genrePromises), artistPromise, yearPromise, labelPromise, featuredImagePromise]).then(([genres, artist, jaren, labels, featuredImageUrl]) => {
-                album.genres = genres
-                album.jaren = jaren
-                album.labels = labels
-                album.artist = artist
-                album.featuredImageUrl = featuredImageUrl
-                return album
-            })
-          })
-          return Promise.all(albumPromises).then(alba => {
-            return {
-              genre: {
-                name: genre.name,
-                description: genre.description,
-              },
-              alba: alba,
-            }
-          });
-        });
-    });
+  
+      const albumsResponse = await apiClient.get('/dma_alba', {
+        params: {
+          genre: genre.id,
+        },
+      });
+  
+      const albumPromises = albumsResponse.data.map(async (album) => {
+        const [genres, artist, jaren, labels, featuredImageUrl] = await Promise.all([
+          fetchAlbumData(album, 'genre'),
+          fetchAlbumData(album, 'artist'),
+          fetchAlbumData(album, 'jaren'),
+          fetchAlbumData(album, 'labels'),
+          album.featured_media
+            ? apiClient.get(`/media/${album.featured_media}`).then((response) => response.data.source_url)
+            : null,
+        ]);
+  
+        album.genres = genres;
+        album.jaren = jaren;
+        album.labels = labels;
+        album.artist = artist;
+        album.featuredImageUrl = featuredImageUrl;
+  
+        return album;
+      });
+  
+      const alba = await Promise.all(albumPromises);
+  
+      return {
+        genre: {
+          name: genre.name,
+          description: genre.description,
+        },
+        alba: alba,
+      };
   },
-  getAlbumsByLabel(labelName) {
-    return apiClient.get('/labels', {
-      params: {
-        search: labelName,
-        per_page: 1,
+  async getAlbumsByLabel(labelName) {
+    const labelResponse = await apiClient.get('/labels', {
+        params: {
+            search: labelName,
+            per_page: 1,
       },
-    }).then((response) => {
-      const label = response.data[0];
-      if (!label) {
+    });
+    
+    const label = labelResponse.data[0];
+    if (!label) {
         throw new Error(`No label found with name "${labelName}"`);
       }
 
-      return apiClient
-        .get('/dma_alba', {
-          params: {
-            label: label.id,
-          },
-        })
-        .then((response) => {
-          const albumPromises = response.data.map(album => {
-            // Get Genres
-            const genreIds = album.genre
-            const genrePromises = genreIds.map(id => {
-              return apiClient.get(`/genre/${id}`).then(response => {
-                const genreName = response.data.name;
-                const div = document.createElement('div');
-                div.innerHTML = genreName;
-                return div.textContent;
-              });
-            });
-
-            // Get Artists
-            const artistId = album.artist
-            const artistPromise = Array.isArray(artistId)
-                ? Promise.all(artistId.map(id => apiClient.get(`/artist/${id}`).then(response => {
-                    const artistName = response.data.name;
-                    const div = document.createElement('div');
-                    div.innerHTML = artistName;
-                    return div.textContent;
-                })))
-                .then(artistNames => artistNames.join(', '))
-                : apiClient.get(`/artist/${artistId}`).then(response => {
-                    const artistName = response.data.name;
-                    const div = document.createElement('div');
-                    div.innerHTML = artistName;
-                    return div.textContent;
-                });
-
-            // Get Years
-            const yearId = album.jaren
-            const yearPromise = Array.isArray(yearId)
-                ? Promise.all(yearId.map(id => apiClient.get(`/jaren/${id}`).then(response => response.data.name)))
-                .then(yearNames => yearNames.join(', '))
-                : apiClient.get(`/jaren/${yearId}`).then(response => response.data.name)
-
-            // Get Labels
-            const labelId = album.labels
-            const labelPromise = Array.isArray(labelId)
-                ? Promise.all(labelId.map(id => apiClient.get(`/labels/${id}`).then(response => response.data.name)))
-                .then(labelNames => labelNames.join(', '))
-                : apiClient.get(`/labels/${labelId}`).then(response => response.data.name)
-
-            // Get Images
-            const featuredImageId = album.featured_media
-            const featuredImagePromise = featuredImageId
-              ? apiClient.get(`/media/${featuredImageId}`).then(response => {
-                return response.data.source_url
-              })
-              : Promise.resolve(null)
-            return Promise.all([Promise.all(genrePromises), artistPromise, yearPromise, labelPromise, featuredImagePromise]).then(([genres, artist, jaren, labels, featuredImageUrl]) => {
-                album.genres = genres
-                album.jaren = jaren
-                album.labels = labels
-                album.artist = artist
-                album.featuredImageUrl = featuredImageUrl
-                return album
-            })
-          })
-          return Promise.all(albumPromises).then(alba => {
-            return {
-              label: {
-                name: label.name,
-                description: label.description,
-              },
-              alba: alba,
-            }
-          });
-        });
-    });
-  }
+      const albumsResponse = await apiClient.get('/dma_alba', {
+        params: {
+          label: label.id,
+        },
+      });
+  
+      const albumPromises = albumsResponse.data.map(async (album) => {
+        const [genres, artist, jaren, labels, featuredImageUrl] = await Promise.all([
+          fetchAlbumData(album, 'genre'),
+          fetchAlbumData(album, 'artist'),
+          fetchAlbumData(album, 'jaren'),
+          fetchAlbumData(album, 'labels'),
+          album.featured_media
+            ? apiClient.get(`/media/${album.featured_media}`).then((response) => response.data.source_url)
+            : null,
+        ]);
+  
+        album.genres = genres;
+        album.jaren = jaren;
+        album.labels = labels;
+        album.artist = artist;
+        album.featuredImageUrl = featuredImageUrl;
+  
+        return album;
+      });
+  
+      const alba = await Promise.all(albumPromises);
+  
+      return {
+        label: {
+          name: label.name,
+          description: label.description,
+        },
+        alba: alba,
+      };
+  },
 }
