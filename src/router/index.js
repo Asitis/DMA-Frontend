@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { eventBus } from '@/utils/EventBus.js'
 import HomeView from '@/views/HomeView.vue'
 import Artist from '@/views/ArtistView.vue'
 import Genre from '@/views/GenreView.vue'
@@ -56,5 +57,12 @@ const router = createRouter({
 
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (['Artist', 'Genre', 'Label', 'Year'].includes(to.name)) {
+    eventBus.emit('clear-filters');
+  }
+  next();
+});
 
 export default router
