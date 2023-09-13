@@ -1,12 +1,3 @@
-<script setup>
-defineProps({
-  album: {
-    type: Object,
-    required: true,
-  }
-})
-</script>
-
 <template>
   <div v-if="album" class="album-card">
     <div class="cover-container">
@@ -14,13 +5,13 @@ defineProps({
     </div>
     <div class="album-content">
       <h2 v-html="album.title.rendered"></h2>
-      <div class="artist">{{ album.artist.join(', ') }}</div>
+      <div class="artist">{{ artistDisplay }}</div>
       <p v-if="album.acf">{{ album.acf.notes }}</p>
     </div>
     <div class="card-end">
-      <div class="year"><label>Year:</label> {{ album.jaren.join(', ') }}</div>
-      <div class="labels"><label>Label:</label> {{ album.labels.join(', ') }}</div>
-      <div v-if="album.genres"><label>Genres:</label> {{ album.genres.join(', ') }}</div>
+      <div class="year"><label>Year:</label> {{ yearDisplay }}</div>
+      <div class="labels"><label>Label:</label> {{ labelDisplay }}</div>
+      <div v-if="album.genres"><label>Genres:</label> {{ genresDisplay }}</div>
     </div>
   </div>
 </template>
@@ -28,3 +19,24 @@ defineProps({
 <style scoped lang="less">
 @import '@/assets/album.less';
 </style>
+
+<script setup>
+import { defineProps, computed } from 'vue';
+
+const props = defineProps({
+  album: {
+    type: Object,
+    required: true,
+  }
+});
+
+// Helper function to join if array or return the value directly.
+const formatData = (data) => {
+  return Array.isArray(data) ? data.join(', ') : data;
+};
+
+const artistDisplay = computed(() => formatData(props.album.artist));
+const yearDisplay = computed(() => formatData(props.album.year));
+const labelDisplay = computed(() => formatData(props.album.labels));
+const genresDisplay = computed(() => formatData(props.album.genres));
+</script>

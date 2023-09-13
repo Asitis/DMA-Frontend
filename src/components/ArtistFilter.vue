@@ -50,6 +50,9 @@ export default {
   methods: {
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen;
+      // if (this.search != '') {
+      //   this.search = '';
+      // }
     },
     selectArtist(artist) {
       console.log('selectArtist fired');

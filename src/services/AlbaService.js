@@ -13,16 +13,6 @@ const apiClient = axios.create({
 async function fetchAlbumData(album, endpoint) {
   const id = album[endpoint];
   if (Array.isArray(id)) {
-    // This worked for single outputs but breaks lazyloading of more content
-    // const promises = id.map((itemId) =>
-    // apiClient.get(`/${endpoint}/${itemId}`).then((response) => response.data.name)
-    // );
-    // if (id.length === 1) {
-    //   const response = await apiClient.get(`/${endpoint}/${id[0]}`);
-    //   return response.data.name;
-    // } else {
-    //   return Promise.all(promises);
-    // }
     const promises = id.map((itemId) =>
       apiClient.get(`/${endpoint}/${itemId}`).then((response) => response.data.name)
     );
