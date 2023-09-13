@@ -1,8 +1,8 @@
 <template>
   <div class="alba" ref="albumList">
-        <div class="intro-card artist">
+    <div class="intro-card genre">
       <h1>{{ genre }}</h1>
-            <p>{{ description }}</p>
+      <p>{{ description }}</p>
     </div>
 
     <AlbumCard v-for="album in alba" :key="album.id" :album="album" />
@@ -22,14 +22,22 @@ export default {
       genre: null,
       description: null,
       alba: []
-    }
+    };
   },
   async created() {
-    const { name } = this.$route.params;
-    const data = await AlbaService.getAlbumsByGenre(name);
-    this.genre = data.genre.name;
-    this.description = data.genre.description;  // This line is to get the description of the genre.
-    this.alba = data.alba;
+    await this.fetchGenreData();
+  },
+  watch: {
+    '$route.params.name': 'fetchGenreData'
+  },
+  methods: {
+    async fetchGenreData() {
+      const { name } = this.$route.params;
+      const data = await AlbaService.getAlbumsByGenre(name);  // This function should fetch albums based on genre
+      this.genre = data.genre.name;
+      this.description = data.genre.description;  // Assuming you have a description for genres
+      this.alba = data.alba;
+    }
   }
 }
 </script>

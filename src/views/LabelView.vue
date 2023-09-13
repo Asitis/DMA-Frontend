@@ -1,8 +1,8 @@
 <template>
   <div class="alba" ref="albumList">
-        <div class="intro-card artist">
+    <div class="intro-card label">
       <h1>{{ label }}</h1>
-            <p>{{ description }}</p>
+      <p>{{ description }}</p>
     </div>
 
     <AlbumCard v-for="album in alba" :key="album.id" :album="album" />
@@ -25,11 +25,19 @@ export default {
     }
   },
   async created() {
-    const { name } = this.$route.params;
-    const data = await AlbaService.getAlbumsByLabel(name);
-    this.label = data.label.name;
-    this.description = data.label.description;  // This line is to get the description of the label.
-    this.alba = data.alba;
+    await this.fetchLabelData();
+  },
+  watch: {
+    '$route.params.name': 'fetchLabelData'
+  },
+  methods: {
+    async fetchLabelData() {
+      const { name } = this.$route.params;
+      const data = await AlbaService.getAlbumsByLabel(name);
+      this.label = data.label.name;
+      this.description = data.label.description;
+      this.alba = data.alba;
+    }
   }
 }
 </script>
