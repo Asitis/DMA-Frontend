@@ -1,6 +1,6 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { nextTick, ref, onMounted, onBeforeUnmount } from 'vue';
 import { eventBus, CLEAR_FILTERS_EXCEPT } from '@/utils/EventBus.js';
 import ArtistFilter from '@/components/ArtistFilter.vue';
 import GenreFilter from '@/components/GenreFilter.vue';
@@ -14,6 +14,10 @@ export default {
       genreSearch: '',
       labelSearch: '',
       yearSearch: '',
+      selectedArtist: '',
+      selectedGenre: '',
+      selectedLabel: '',
+      selectedYear: '',
     };
   },
   components: {
@@ -23,29 +27,20 @@ export default {
     YearFilter,
   },
   methods: {
-    handleArtistSelected(artist) {},
-    handleGenreSelected(genre) {},
-    handleLabelSelected(label) {},
-    handleYearSelected(year) {},
+    handleArtistSelected(artist) { this.selectedArtist = artist },
+    handleGenreSelected(genre) { this.selectedGenre = genre },
+    handleLabelSelected(label) { this.selectedLabel = label },
+    handleYearSelected(year) { this.selectedYear = year },
 
     clearFilters(except) {
-      console.log('clearfilters called');
-        if (except !== 'artist') {
-            this.selectedArtist = null;
-        }
-        if (except !== 'genre') {
-            this.selectedGenre = null;
-        }
-        if (except !== 'label') {
-            this.selectedLabel = null;
-        }
-        if (except !== 'year') {
-            this.selectedYear = null;
-        }
-      // this.artistSearch = '';
-      // this.genreSearch = '';
-      // this.labelSearch = '';
-      // this.yearSearch = '';
+      //console.log('clearfilters called, except ' + except);
+      nextTick(() => {
+        if (except !== 'artist') { this.$refs.artistFilter.clearInput(); this.selectedArtist = null; this.artistSearch = ''; }
+        if (except !== 'genre') { this.$refs.genreFilter.clearInput(); this.selectedGenre = null; this.genreSearch = ''; }
+        if (except !== 'label') { this.$refs.labelFilter.clearInput(); this.selectedLabel = null; this.labelSearch = ''; }
+        if (except !== 'year') { this.$refs.yearFilter.clearInput(); this.selectedYear = null; this.yearSearch = ''; }
+      });
+      //console.log(this.selectedArtist, this.selectedGenre, this.selectedLabel, this.selectedYear);
     }
   },
   created() {
@@ -62,10 +57,10 @@ export default {
     <RouterView />
     <footer>
       <RouterLink to="/"><img src="@/assets/logo.svg" class="logo"></RouterLink>
-      <ArtistFilter :search="artistSearch" @update-search="artistSearch = $event" @artist-selected="handleArtistSelected" />
-      <GenreFilter :search="genreSearch" @update-search="genreSearch = $event" @genre-selected="handleGenreSelected" />
-      <LabelFilter :search="labelSearch" @update-search="labelSearch = $event" @label-selected="handleLabelSelected" />
-      <YearFilter :search="yearSearch" @update-search="yearSearch = $event" @year-selected="handleYearSelected" />
+      <ArtistFilter ref="artistFilter" :search="artistSearch" @update-search="artistSearch = $event" @artist-selected="handleArtistSelected" />
+      <GenreFilter ref="genreFilter" :search="genreSearch" @update-search="genreSearch = $event" @genre-selected="handleGenreSelected" />
+      <LabelFilter ref="labelFilter" :search="labelSearch" @update-search="labelSearch = $event" @label-selected="handleLabelSelected" />
+      <YearFilter ref="yearFilter" :search="yearSearch" @update-search="yearSearch = $event" @year-selected="handleYearSelected" />
     </footer>
   </div>
 </template>

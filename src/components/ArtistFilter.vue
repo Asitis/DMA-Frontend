@@ -1,10 +1,11 @@
 <template>
   <div class="artist-filter filter">
     <div class="dropdown">
-      <div class="dropdown-input" @click="toggleDropdown">
+      <div class="dropdown-input">
         <input
+          ref="artistInput"
           type="text"
-          v-model="search"
+          v-model="localSearch"
           placeholder="Search artist"
           @focus="isDropdownOpen = true"
         />
@@ -26,16 +27,32 @@
 
 <script>
 import AlbaService from '@/services/AlbaService.js';
-
+import { eventBus } from '@/utils/EventBus.js';
+const CLEAR_FILTERS_EXCEPT = 'clear-filters-except';
 export default {
+  props: {
+    search: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       artists: [],
-      search: '',
+      localSearch: this.search,
       isDropdownOpen: false,
     };
   },
+  watch: {
+    search(newVal) {
+      this.localSearch = newVal;
+    },
+    localSearch(newVal) {
+      this.$emit('update-search', newVal);
+    }
+  },
   created() {
+    this.localSearch = this.search; // can go?
     AlbaService.getArtists().then((response) => {
       this.artists = response;
     });
@@ -48,20 +65,17 @@ export default {
     },
   },
   methods: {
-    toggleDropdown() {
-      this.isDropdownOpen = !this.isDropdownOpen;
-      // if (this.search != '') {
-      //   this.search = '';
-      // }
-    },
     selectArtist(artist) {
-      console.log('selectArtist fired');
-      this.search = artist;
+      eventBus.emit(CLEAR_FILTERS_EXCEPT, 'artist');
+      this.localSearch = artist;
       this.isDropdownOpen = false;
       this.$emit('artist-selected', artist);
       this.$router.push({ name: 'Artist', params: { name: artist }});
     },
-  },
+    clearInput() {
+      this.$refs.artistInput.value = '';
+    }
+  }
 };
 </script>
 

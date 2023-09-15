@@ -1,10 +1,11 @@
 <template>
   <div class="genre-filter filter">
     <div class="dropdown">
-      <div class="dropdown-input" @click="toggleDropdown">
+      <div class="dropdown-input">
         <input
+          ref="genreInput"
           type="text"
-          v-model="search"
+          v-model="localSearch"
           placeholder="Search genres"
           @focus="isDropdownOpen = true"
         />
@@ -26,14 +27,29 @@
 
 <script>
 import AlbaService from '@/services/AlbaService.js';
-
+import { eventBus } from '@/utils/EventBus.js';
+const CLEAR_FILTERS_EXCEPT = 'clear-filters-except';
 export default {
+  props: {
+    search: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       genres: [],
-      search: '',
+      localSearch: this.search,
       isDropdownOpen: false,
     };
+  },
+  watch: {
+    search(newVal) {
+      this.localSearch = newVal;
+    },
+    localSearch(newVal) {
+      this.$emit('update-search', newVal);
+    }
   },
   created() {
     AlbaService.getGenres().then((response) => {
@@ -48,15 +64,16 @@ export default {
     },
   },
   methods: {
-    toggleDropdown() {
-      this.isDropdownOpen = !this.isDropdownOpen;
-    },
     selectGenre(genre) {
-      this.search = genre;
+      eventBus.emit(CLEAR_FILTERS_EXCEPT, 'genre');
+      this.localSearch = genre;
       this.isDropdownOpen = false;
       this.$emit('genre-selected', genre);
       this.$router.push({ name: 'Genre', params: { name: genre }});
     },
+    clearInput() {
+      this.$refs.genreInput.value = '';
+    }
   },
 };
 </script>

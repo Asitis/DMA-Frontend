@@ -1,10 +1,11 @@
 <template>
   <div class="label-filter filter">
     <div class="dropdown">
-      <div class="dropdown-input" @click="toggleDropdown">
+      <div class="dropdown-input">
         <input
+          ref="labelInput"
           type="text"
-          v-model="search"
+          v-model="localSearch"
           placeholder="Search labels"
           @focus="isDropdownOpen = true"
         />
@@ -15,7 +16,7 @@
           class="dropdown-item"
           v-for="(label, index) in filteredLabels"
           :key="index"
-          @click="selectLabel(label)"
+          @click.stop="selectLabel(label)"
         >
           {{ label }}
         </div>
@@ -26,14 +27,31 @@
 
 <script>
 import AlbaService from '@/services/AlbaService.js';
-
+import { eventBus } from '@/utils/EventBus.js';
+const CLEAR_FILTERS_EXCEPT = 'clear-filters-except';
 export default {
+  props: {
+    search: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       labels: [],
-      search: '',
+      localSearch: this.search,
       isDropdownOpen: false,
     };
+  },
+  watch: {
+    // Watch for changes to the incoming 'search' prop
+    search(newVal) {
+      this.localSearch = newVal;
+    },
+    // Watch for changes to the local data property
+    localSearch(newVal) {
+      this.$emit('update-search', newVal);
+    }
   },
   created() {
     AlbaService.getLabels().then((response) => {
@@ -48,15 +66,17 @@ export default {
     },
   },
   methods: {
-    toggleDropdown() {
-      this.isDropdownOpen = !this.isDropdownOpen;
-    },
     selectLabel(label) {
-      this.search = label;
+      console.log('selectLabel called');
+      eventBus.emit(CLEAR_FILTERS_EXCEPT, 'Label');
+      this.localSearch = label;
       this.isDropdownOpen = false;
       this.$emit('label-selected', label);
       this.$router.push({ name: 'Label', params: { name: label }});
     },
+    clearInput() {
+      this.$refs.labelInput.value = '';
+    }
   },
 };
 </script>

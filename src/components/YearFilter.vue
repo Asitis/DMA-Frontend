@@ -1,10 +1,11 @@
 <template>
   <div class="year-filter filter">
     <div class="dropdown">
-      <div class="dropdown-input" @click="toggleDropdown">
+      <div class="dropdown-input">
         <input
+          ref="yearInput"
           type="text"
-          v-model="search"
+          v-model="localSearch"
           placeholder="Search years"
           @focus="isDropdownOpen = true"
         />
@@ -26,14 +27,31 @@
 
 <script>
 import AlbaService from '@/services/AlbaService.js';
-
+import { eventBus } from '@/utils/EventBus.js';
+const CLEAR_FILTERS_EXCEPT = 'clear-filters-except';
 export default {
+  props: {
+    search: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       years: [],
-      search: '',
+      localSearch: this.search,
       isDropdownOpen: false,
     };
+  },
+  watch: {
+    // Watch for changes to the incoming 'search' prop
+    search(newVal) {
+      this.localSearch = newVal;
+    },
+    // Watch for changes to the local data property
+    localSearch(newVal) {
+      this.$emit('update-search', newVal);
+    }
   },
   created() {
     AlbaService.getYears().then((response) => {
@@ -48,16 +66,16 @@ export default {
     },
   },
   methods: {
-    toggleDropdown() {
-      this.isDropdownOpen = !this.isDropdownOpen;
-    },
     selectYear(year) {
-      console.log(year);
-      this.search = year;
+      eventBus.emit(CLEAR_FILTERS_EXCEPT, 'year');
+      this.localSearch = year;
       this.isDropdownOpen = false;
       this.$emit('year-selected', year);
       this.$router.push({ name: 'Year', params: { name: year }});
     },
+    clearInput() {
+      this.$refs.yearInput.value = '';
+    }
   },
 };
 </script>
