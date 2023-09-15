@@ -7,7 +7,7 @@
           type="text"
           v-model="localSearch"
           placeholder="Search artist"
-          @focus="isDropdownOpen = true"
+          @focus="handleInputFocus"
         />
         <i class="fas fa-search"></i>
       </div>
@@ -70,6 +70,10 @@ export default {
     document.removeEventListener('click', this.outsideClickListener);
   },
   methods: {
+    handleInputFocus() {
+      eventBus.emit(CLEAR_FILTERS_EXCEPT);
+      this.isDropdownOpen = true;
+    },
     selectArtist(artist) {
       eventBus.emit(CLEAR_FILTERS_EXCEPT, 'artist');
       this.localSearch = artist;

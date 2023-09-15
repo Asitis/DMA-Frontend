@@ -7,7 +7,7 @@
           type="text"
           v-model="localSearch"
           placeholder="Search genres"
-          @focus="isDropdownOpen = true"
+          @focus="handleInputFocus"
         />
         <i class="fas fa-search"></i>
       </div>
@@ -71,6 +71,10 @@ export default {
     document.removeEventListener('click', this.outsideClickListener);
   },
   methods: {
+    handleInputFocus() {
+      eventBus.emit(CLEAR_FILTERS_EXCEPT);
+      this.isDropdownOpen = true;
+    },
     selectGenre(genre) {
       eventBus.emit(CLEAR_FILTERS_EXCEPT, 'genre');
       this.localSearch = genre;

@@ -7,7 +7,7 @@
           type="text"
           v-model="localSearch"
           placeholder="Search labels"
-          @focus="isDropdownOpen = true"
+          @focus="handleInputFocus"
         />
         <i class="fas fa-search"></i>
       </div>
@@ -72,6 +72,10 @@ export default {
     document.removeEventListener('click', this.outsideClickListener);
   },
   methods: {
+    handleInputFocus() {
+      eventBus.emit(CLEAR_FILTERS_EXCEPT);
+      this.isDropdownOpen = true;
+    },
     selectLabel(label) {
       eventBus.emit(CLEAR_FILTERS_EXCEPT, 'Label');
       this.localSearch = label;
