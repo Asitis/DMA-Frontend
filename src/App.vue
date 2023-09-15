@@ -26,6 +26,13 @@ export default {
     LabelFilter,
     YearFilter,
   },
+  watch: {
+    '$route'(to, from) {
+      if (to.name === 'home' || to.path === '/') {
+        this.clearFilters();
+      }
+    }
+  },
   methods: {
     handleArtistSelected(artist) { this.selectedArtist = artist },
     handleGenreSelected(genre) { this.selectedGenre = genre },
