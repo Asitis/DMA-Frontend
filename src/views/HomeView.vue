@@ -1,6 +1,6 @@
 <template>
   <div class="alba" ref="albumList">
-    <div class="intro-card">
+    <div class="intro-card home">
       <h1>Music<br>Tasting<br>Notes</h1>
       <h3>Is what these are.</h3>
       <p>Here I keep notes on 'all' the albums I listen, as a personal reference to remember me about all the awesome music out there. Most notes will be very positive, because I don't tend to listen to music I don't like.</p>

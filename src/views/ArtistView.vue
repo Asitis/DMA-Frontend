@@ -1,6 +1,7 @@
 <template>
   <div class="alba" ref="albumList">
     <div class="intro-card artist">
+      <RouterLink to="/" class="backBtn">&laquo;</RouterLink>
       <h1>{{ artist }}</h1>
       <p>{{ description }}</p>
     </div>

@@ -1,7 +1,7 @@
 <template>
-  <div class="label-filter filter">
+  <div class="label-filter filter" ref="dropdownContainer">
     <div class="dropdown">
-      <div class="dropdown-input">
+      <div class="dropdown-input" @click.stop>
         <input
           ref="labelInput"
           type="text"
@@ -65,9 +65,14 @@ export default {
       });
     },
   },
+  mounted() {
+    document.addEventListener('click', this.outsideClickListener);
+  },
+  beforeUnmount() {
+    document.removeEventListener('click', this.outsideClickListener);
+  },
   methods: {
     selectLabel(label) {
-      console.log('selectLabel called');
       eventBus.emit(CLEAR_FILTERS_EXCEPT, 'Label');
       this.localSearch = label;
       this.isDropdownOpen = false;
@@ -76,6 +81,11 @@ export default {
     },
     clearInput() {
       this.$refs.labelInput.value = '';
+    },
+    outsideClickListener(event) {
+      if (!this.$refs.dropdownContainer.contains(event.target)) {
+        this.isDropdownOpen = false;
+      }
     }
   },
 };

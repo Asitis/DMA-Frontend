@@ -1,7 +1,7 @@
 <template>
-  <div class="genre-filter filter">
+  <div class="genre-filter filter" ref="dropdownContainer">
     <div class="dropdown">
-      <div class="dropdown-input">
+      <div class="dropdown-input" @click.stop>
         <input
           ref="genreInput"
           type="text"
@@ -52,6 +52,7 @@ export default {
     }
   },
   created() {
+    this.localSearch = this.search;
     AlbaService.getGenres().then((response) => {
       this.genres = response;
     });
@@ -63,6 +64,12 @@ export default {
       });
     },
   },
+  mounted() {
+    document.addEventListener('click', this.outsideClickListener);
+  },
+  beforeUnmount() {
+    document.removeEventListener('click', this.outsideClickListener);
+  },
   methods: {
     selectGenre(genre) {
       eventBus.emit(CLEAR_FILTERS_EXCEPT, 'genre');
@@ -73,6 +80,11 @@ export default {
     },
     clearInput() {
       this.$refs.genreInput.value = '';
+    },
+    outsideClickListener(event) {
+      if (!this.$refs.dropdownContainer.contains(event.target)) {
+        this.isDropdownOpen = false;
+      }
     }
   },
 };

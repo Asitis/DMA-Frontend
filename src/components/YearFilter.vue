@@ -1,7 +1,7 @@
 <template>
-  <div class="year-filter filter">
+  <div class="year-filter filter" ref="dropdownContainer">
     <div class="dropdown">
-      <div class="dropdown-input">
+      <div class="dropdown-input" @click.stop>
         <input
           ref="yearInput"
           type="text"
@@ -65,6 +65,12 @@ export default {
       });
     },
   },
+  mounted() {
+    document.addEventListener('click', this.outsideClickListener);
+  },
+  beforeUnmount() {
+    document.removeEventListener('click', this.outsideClickListener);
+  },
   methods: {
     selectYear(year) {
       eventBus.emit(CLEAR_FILTERS_EXCEPT, 'year');
@@ -75,6 +81,11 @@ export default {
     },
     clearInput() {
       this.$refs.yearInput.value = '';
+    },
+    outsideClickListener(event) {
+      if (!this.$refs.dropdownContainer.contains(event.target)) {
+        this.isDropdownOpen = false;
+      }
     }
   },
 };

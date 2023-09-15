@@ -1,7 +1,7 @@
 <template>
-  <div class="artist-filter filter">
+  <div class="artist-filter filter" ref="dropdownContainer">
     <div class="dropdown">
-      <div class="dropdown-input">
+      <div class="dropdown-input" @click.stop>
         <input
           ref="artistInput"
           type="text"
@@ -52,7 +52,6 @@ export default {
     }
   },
   created() {
-    this.localSearch = this.search; // can go?
     AlbaService.getArtists().then((response) => {
       this.artists = response;
     });
@@ -64,6 +63,12 @@ export default {
       });
     },
   },
+  mounted() {
+    document.addEventListener('click', this.outsideClickListener);
+  },
+  beforeUnmount() {
+    document.removeEventListener('click', this.outsideClickListener);
+  },
   methods: {
     selectArtist(artist) {
       eventBus.emit(CLEAR_FILTERS_EXCEPT, 'artist');
@@ -74,6 +79,11 @@ export default {
     },
     clearInput() {
       this.$refs.artistInput.value = '';
+    },
+    outsideClickListener(event) {
+      if (!this.$refs.dropdownContainer.contains(event.target)) {
+        this.isDropdownOpen = false;
+      }
     }
   }
 };
