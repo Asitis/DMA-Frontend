@@ -66,7 +66,12 @@ export default {
               per_page: 100 // Limit the number of results to 100
           }
       }).then(response => {
-          return response.data.map(artist => artist.name)
+          return response.data.map(artist => { 
+            return { 
+              name: artist.name, 
+              count: artist.count
+            }
+          })
       })
   },
   getGenres() {
@@ -75,7 +80,12 @@ export default {
             per_page: 100 // Limit the number of results to 100
         }
     }).then(response => {
-        return response.data.map(genre => genre.name)
+        return response.data.map(genre => {
+          return {
+            name: genre.name,
+            count: genre.count
+          }
+        })
     })
   },
   getLabels() {
@@ -84,7 +94,12 @@ export default {
             per_page: 100 // Limit the number of results to 100
         }
     }).then(response => {
-        return response.data.map(label => label.name)
+        return response.data.map(label => { 
+          return { 
+            name: label.name, 
+            count: label.count
+          }
+        })
     })
   },
   getYears() {
@@ -93,7 +108,12 @@ export default {
             per_page: 100 // Limit the number of results to 100
         }
     }).then(response => {
-        return response.data.map(year => year.name)
+        return response.data.map(year => { 
+          return { 
+            name: year.name, 
+            count: year.count
+          }
+        })
     })
   },
   async getAlbumsByArtist(artistName) {
@@ -140,6 +160,7 @@ export default {
     return {
       artist: {
         name: artist.name,
+        count: artist.count,
         description: artist.description,
       },
       alba: alba,
@@ -189,6 +210,7 @@ export default {
       return {
         genre: {
           name: genre.name,
+          count: genre.count,
           description: genre.description,
         },
         alba: alba,
@@ -238,6 +260,7 @@ export default {
       return {
         label: {
           name: label.name,
+          count: label.count,
           description: label.description,
         },
         alba: alba,
@@ -287,6 +310,7 @@ export default {
       return {
         year: {
           name: year.name,
+          count: year.count,
           description: year.description,
         },
         alba: alba,

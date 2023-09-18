@@ -13,12 +13,12 @@
       </div>
       <div class="dropdown-menu" v-if="isDropdownOpen">
         <div
-          class="dropdown-item"
+          class="dropdown-item clearfix"
           v-for="(year, index) in filteredYears"
           :key="index"
-          @click="selectYear(year)"
+          @click="selectYear(year.name)"
         >
-          {{ year }}
+          <span class="name">{{ year.name }}</span> <span class="count">{{ year.count }}</span>
         </div>
       </div>
     </div>
@@ -61,7 +61,7 @@ export default {
   computed: {
     filteredYears() {
       return this.years.filter((year) => {
-        return year.toLowerCase().indexOf(this.search.toLowerCase()) !== -1;
+        return year.name.toLowerCase().indexOf(this.search.toLowerCase()) !== -1;
       });
     },
   },

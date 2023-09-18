@@ -40,11 +40,29 @@
     background-color: rgba(0,0,0,0.8);
     
     .dropdown-item {
-        display: block;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         padding: 10px 5px;
         cursor: pointer;
+        clear: both;
         &:hover {
             background-color: #252525;
+        }
+
+        span.name {
+            flex: 1;
+            padding: 0 2px;
+        }
+        span.count {
+            background: rgba(255,255,255,0.2);
+            border-radius: 50px;
+            width: 25px;
+            height: 25px;
+            font-size: 12px;
+            justify-content: center;
+            align-items: center;
+            display: flex;
         }
     }    
 }

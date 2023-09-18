@@ -13,12 +13,12 @@
       </div>
       <div class="dropdown-menu" v-if="isDropdownOpen">
         <div
-          class="dropdown-item"
+          class="dropdown-item clearfix"
           v-for="(genre, index) in filteredGenres"
           :key="index"
-          @click="selectGenre(genre)"
+          @click="selectGenre(genre.name)"
         >
-          {{ genre }}
+          <span class="name">{{ genre.name }}</span> <span class="count">{{ genre.count }}</span>
         </div>
       </div>
     </div>
@@ -60,7 +60,7 @@ export default {
   computed: {
     filteredGenres() {
       return this.genres.filter((genre) => {
-        return genre.toLowerCase().indexOf(this.search.toLowerCase()) !== -1;
+        return genre.name.toLowerCase().indexOf(this.search.toLowerCase()) !== -1;
       });
     },
   },

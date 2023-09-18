@@ -13,12 +13,12 @@
       </div>
       <div class="dropdown-menu" v-if="isDropdownOpen">
         <div
-          class="dropdown-item"
+          class="dropdown-item clearfix"
           v-for="(artist, index) in filteredArtists"
           :key="index"
-          @click="selectArtist(artist)"
+          @click="selectArtist(artist.name)"
         >
-          {{ artist }}
+          <span class="name">{{ artist.name }}</span> <span class="count">{{ artist.count }}</span>
         </div>
       </div>
     </div>
@@ -59,7 +59,7 @@ export default {
   computed: {
     filteredArtists() {
       return this.artists.filter((artist) => {
-        return artist.toLowerCase().indexOf(this.search.toLowerCase()) !== -1;
+        return artist.name.toLowerCase().indexOf(this.search.toLowerCase()) !== -1;
       });
     },
   },

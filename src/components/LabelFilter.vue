@@ -13,12 +13,12 @@
       </div>
       <div class="dropdown-menu" v-if="isDropdownOpen">
         <div
-          class="dropdown-item"
+          class="dropdown-item clearfix"
           v-for="(label, index) in filteredLabels"
           :key="index"
-          @click.stop="selectLabel(label)"
+          @click.stop="selectLabel(label.name)"
         >
-          {{ label }}
+          <span class="name">{{ label.name }}</span> <span class="count">{{ label.count }}</span>
         </div>
       </div>
     </div>
@@ -61,7 +61,7 @@ export default {
   computed: {
     filteredLabels() {
       return this.labels.filter((label) => {
-        return label.toLowerCase().indexOf(this.search.toLowerCase()) !== -1;
+        return label.name.toLowerCase().indexOf(this.search.toLowerCase()) !== -1;
       });
     },
   },
