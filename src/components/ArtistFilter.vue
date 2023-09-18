@@ -11,16 +11,18 @@
         />
         <i class="fas fa-search"></i>
       </div>
-      <div class="dropdown-menu" v-if="isDropdownOpen">
-        <div
-          class="dropdown-item clearfix"
-          v-for="(artist, index) in filteredArtists"
-          :key="index"
-          @click="selectArtist(artist.name)"
-        >
-          <span class="name">{{ artist.name }}</span> <span class="count">{{ artist.count }}</span>
+      <transition name="slide">
+        <div class="dropdown-menu" v-if="isDropdownOpen">
+          <div
+            class="dropdown-item clearfix"
+            v-for="(artist, index) in filteredArtists"
+            :key="index"
+            @click="selectArtist(artist.name)"
+          >
+            <span class="name" v-html="artist.name"></span> <span class="count">{{ artist.count }}</span>
+          </div>
         </div>
-      </div>
+      </transition>
     </div>
   </div>
 </template>

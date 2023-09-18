@@ -5,13 +5,13 @@
     </div>
     <div class="album-content">
       <h2 v-html="album.title.rendered"></h2>
-      <div class="artist">{{ artistDisplay }}</div>
+      <div class="artist"><span v-html="artistDisplay"></span></div>
       <p v-if="album.acf">{{ album.acf.notes }}</p>
     </div>
     <div class="card-end">
       <div class="year"><label>Year:</label> {{ yearDisplay }}</div>
       <div class="labels"><label>Label:</label> {{ labelDisplay }}</div>
-      <div v-if="album.genres"><label>Genres:</label> {{ genresDisplay }}</div>
+      <div v-if="album.genres"><label>Genres:</label> <span v-html="genresDisplay"></span></div>
     </div>
   </div>
 </template>

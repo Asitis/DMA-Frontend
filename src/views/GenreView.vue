@@ -2,8 +2,8 @@
   <div class="alba" ref="albumList">
     <div class="intro-card genre">
       <RouterLink to="/" class="backBtn">&laquo;</RouterLink>
-      <h1>{{ genre }}</h1>
-      <p>{{ description }}</p>
+      <h1><span v-html="genre"></span></h1>
+      <p><span v-html="description"></span></p>
     </div>
 
     <AlbumCard v-for="album in alba" :key="album.id" :album="album" />

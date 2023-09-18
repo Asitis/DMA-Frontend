@@ -18,7 +18,7 @@
           :key="index"
           @click.stop="selectLabel(label.name)"
         >
-          <span class="name">{{ label.name }}</span> <span class="count">{{ label.count }}</span>
+          <span class="name" v-html="label.name"></span> <span class="count">{{ label.count }}</span>
         </div>
       </div>
     </div>

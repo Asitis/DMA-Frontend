@@ -18,7 +18,7 @@
           :key="index"
           @click="selectGenre(genre.name)"
         >
-          <span class="name">{{ genre.name }}</span> <span class="count">{{ genre.count }}</span>
+          <span class="name" v-html="genre.name"></span> <span class="count">{{ genre.count }}</span>
         </div>
       </div>
     </div>
