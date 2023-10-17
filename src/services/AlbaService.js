@@ -60,61 +60,112 @@ export default {
     return Promise.all(albumPromises);
   },
 
-  getArtists() {
-      return apiClient.get('/artist', {
+  async getArtists() {
+    let allArtists = [];
+    let currentPage = 1;
+    try {
+      let hasMore = false;
+      do {
+        const response = await apiClient.get('/artist', {
           params: {
-              per_page: 100 // Limit the number of results to 100
-          }
-      }).then(response => {
-          return response.data.map(artist => { 
-            return { 
-              name: artist.name, 
-              count: artist.count
-            }
-          })
-      })
+            per_page: 100,
+            page: currentPage,
+          },
+        });
+        allArtists = [...allArtists, ...response.data.map(artist => {
+          return {
+            name: artist.name,
+            count: artist.count,
+          };
+        })];
+        hasMore = response.data.length === 100;
+        currentPage++;
+      } while (hasMore);
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+    return allArtists;
   },
-  getGenres() {
-    return apiClient.get('/genre', {
-        params: {
-            per_page: 100 // Limit the number of results to 100
-        }
-    }).then(response => {
-        return response.data.map(genre => {
+  async getGenres() {
+    let allGenres = [];
+    let currentPage = 1;
+
+    try {
+      let hasMore = false;
+      do {
+        const response = await apiClient.get('/genre', {
+          params: {
+            per_page: 100,
+            page: currentPage,
+          },
+        });
+        allGenres = [...allGenres, ...response.data.map(genre => {
           return {
             name: genre.name,
-            count: genre.count
-          }
-        })
-    })
+            count: genre.count,
+          };
+        })];
+        hasMore = response.data.length === 100;
+        currentPage++;
+      } while (hasMore);
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+    return allGenres;
   },
-  getLabels() {
-    return apiClient.get('/labels', {
-        params: {
-            per_page: 100 // Limit the number of results to 100
-        }
-    }).then(response => {
-        return response.data.map(label => { 
-          return { 
-            name: label.name, 
-            count: label.count
-          }
-        })
-    })
+  async getLabels() {
+    let allLabels = [];
+    let currentPage = 1;
+
+    try {
+      let hasMore = false;
+      do {
+        const response = await apiClient.get('/labels', {
+          params: {
+            per_page: 100,
+            page: currentPage,
+          },
+        });
+        allLabels = [...allLabels, ...response.data.map(label => {
+          return {
+            name: label.name,
+            count: label.count,
+          };
+        })];
+        hasMore = response.data.length === 100;
+        currentPage++;
+      } while (hasMore);
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+    return allLabels;
   },
-  getYears() {
-    return apiClient.get('/jaren', {
-        params: {
-            per_page: 100 // Limit the number of results to 100
-        }
-    }).then(response => {
-        return response.data.map(year => { 
-          return { 
-            name: year.name, 
-            count: year.count
-          }
-        })
-    })
+  async getYears() {
+    let allYears = [];
+    let currentPage = 1;
+
+    try {
+      let hasMore = false;
+      do {
+        const response = await apiClient.get('/jaren', {
+          params: {
+            per_page: 100,
+            page: currentPage,
+          },
+        });
+        allYears = [...allYears, ...response.data.map(year => {
+          return {
+            name: year.name,
+            count: year.count,
+          };
+        })];
+        hasMore = response.data.length === 100;
+        currentPage++;
+      } while (hasMore);
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+    return allYears;
   },
   async getAlbumsByArtist(artistName) {
     const artistResponse = await apiClient.get('/artist', {
