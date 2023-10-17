@@ -2,7 +2,7 @@
   <div class="alba" ref="albumList">
     <div class="intro-card year">
       <RouterLink to="/" class="backBtn">&laquo;</RouterLink>
-      <h1><span v-html="artist"></span></h1>
+      <h1><span v-html="year"></span></h1>
       <p><span v-html="description"></span></p>
     </div>
 
