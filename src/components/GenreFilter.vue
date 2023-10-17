@@ -11,16 +11,18 @@
         />
         <i class="fas fa-search"></i>
       </div>
-      <div class="dropdown-menu" v-if="isDropdownOpen">
-        <div
-          class="dropdown-item clearfix"
-          v-for="(genre, index) in filteredGenres"
-          :key="index"
-          @click="selectGenre(genre.name)"
-        >
-          <span class="name" v-html="genre.name"></span> <span class="count">{{ genre.count }}</span>
+      <transition name="slide">
+        <div class="dropdown-menu" v-if="isDropdownOpen">
+          <div
+            class="dropdown-item clearfix"
+            v-for="(genre, index) in filteredGenres"
+            :key="index"
+            @click="selectGenre(genre.name)"
+          >
+            <span class="name" v-html="genre.name"></span> <span class="count">{{ genre.count }}</span>
+          </div>
         </div>
-      </div>
+      </transition>
     </div>
   </div>
 </template>

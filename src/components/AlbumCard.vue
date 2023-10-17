@@ -1,6 +1,9 @@
 <template>
   <div v-if="album" class="album-card">
     <div class="cover-container">
+      <div v-if="album.acf.spotify_uri" class="spotify">
+        <iframe :src="'https://embed.spotify.com/?uri=' + album.acf.spotify_uri" width="100%" height="80" frameborder="0" allowtransparency="true"></iframe>
+      </div>
       <img v-if="album.featuredImageUrl" :src="album.featuredImageUrl" alt="Album cover" class="cover">
     </div>
     <div class="album-content">

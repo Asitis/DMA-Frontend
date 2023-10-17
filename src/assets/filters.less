@@ -17,6 +17,9 @@
     cursor: pointer;
     width: 255px;
     border: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+    z-index: 10;
+    background: #000000;
 }
 
 .dropdown-input input {
@@ -39,10 +42,11 @@
     border-radius: 4px;
     max-height: 200px;
     overflow-y: auto;
-    z-index: 10;
+    z-index: 5;
     width: 100%;
     color: #fff;
     background-color: rgba(0,0,0,0.7);
+    box-sizing: border-box;
     
     .dropdown-item {
         display: flex;
@@ -95,9 +99,9 @@ i.fas {
   }
   
   .slide-enter-active {
-    animation: slideUp 0.5s forwards;
+    animation: slideUp 0.2s forwards;
   }
   
   .slide-leave-active {
-    animation: slideDown 0.5s forwards;
+    animation: slideDown 0.2s forwards;
   }

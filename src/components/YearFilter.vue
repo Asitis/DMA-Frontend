@@ -11,16 +11,18 @@
         />
         <i class="fas fa-search"></i>
       </div>
-      <div class="dropdown-menu" v-if="isDropdownOpen">
-        <div
-          class="dropdown-item clearfix"
-          v-for="(year, index) in filteredYears"
-          :key="index"
-          @click="selectYear(year.name)"
-        >
-          <span class="name">{{ year.name }}</span> <span class="count">{{ year.count }}</span>
+      <transition name="slide">
+        <div class="dropdown-menu" v-if="isDropdownOpen">
+          <div
+            class="dropdown-item clearfix"
+            v-for="(year, index) in filteredYears"
+            :key="index"
+            @click="selectYear(year.name)"
+          >
+            <span class="name">{{ year.name }}</span> <span class="count">{{ year.count }}</span>
+          </div>
         </div>
-      </div>
+      </transition>
     </div>
   </div>
 </template>

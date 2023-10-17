@@ -11,16 +11,18 @@
         />
         <i class="fas fa-search"></i>
       </div>
-      <div class="dropdown-menu" v-if="isDropdownOpen">
-        <div
-          class="dropdown-item clearfix"
-          v-for="(label, index) in filteredLabels"
-          :key="index"
-          @click.stop="selectLabel(label.name)"
-        >
-          <span class="name" v-html="label.name"></span> <span class="count">{{ label.count }}</span>
+      <transition name="slide">
+        <div class="dropdown-menu" v-if="isDropdownOpen">
+          <div
+            class="dropdown-item clearfix"
+            v-for="(label, index) in filteredLabels"
+            :key="index"
+            @click.stop="selectLabel(label.name)"
+          >
+            <span class="name" v-html="label.name"></span> <span class="count">{{ label.count }}</span>
+          </div>
         </div>
-      </div>
+      </transition>
     </div>
   </div>
 </template>
