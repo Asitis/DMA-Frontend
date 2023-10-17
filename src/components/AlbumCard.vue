@@ -8,13 +8,28 @@
     </div>
     <div class="album-content">
       <h2 v-html="album.title.rendered"></h2>
-      <div class="artist"><span v-html="artistDisplay"></span></div>
+      <router-link class="artistLink" :to="{ name: 'Artist', params: { name: artistDisplay } }">
+        <div class="artist"><span v-html="artistDisplay"></span></div>
+      </router-link>
       <p v-if="album.acf">{{ album.acf.notes }}</p>
     </div>
     <div class="card-end">
-      <div class="year"><label>Year:</label> {{ yearDisplay }}</div>
-      <div class="labels"><label>Label:</label> {{ labelDisplay }}</div>
-      <div v-if="album.genres"><label>Genres:</label> <span v-html="genresDisplay"></span></div>
+      <div class="year">
+        <label>Year: </label> 
+        <router-link :to="{ name: 'Year', params: { name: yearDisplay } }">
+          <span v-html="yearDisplay"></span>
+        </router-link>
+      </div>
+      <div class="labels">
+        <label>Label: </label> 
+          <router-link :to="{ name: 'Label', params: { name: labelDisplay } }">
+            <span v-html="labelDisplay"></span>
+          </router-link>
+      </div>
+      <div v-if="album.genres">
+        <label>Genres: </label>
+        <span v-html="genresDisplay"></span>
+      </div>
     </div>
   </div>
 </template>
