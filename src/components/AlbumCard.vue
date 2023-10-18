@@ -24,9 +24,9 @@
             <h2 v-html="album.title.rendered"></h2>
             <div class="artist">
                 <span v-for="(artistItem, index) in artistDisplay" :key="index">
-                    <router-link class="artistLink" :to="artistItem.link">{{
-                        artistItem.name
-                    }}</router-link>
+                    <router-link class="artistLink" :to="artistItem.link">
+                        <span v-html="artistItem.name"></span>
+                    </router-link>
                     <span v-if="index < artistDisplay.length - 1">, </span>
                 </span>
             </div>
@@ -51,9 +51,9 @@
                         v-for="(labelItem, index) in labelDisplay"
                         :key="index"
                     >
-                        <router-link :to="labelItem.link">{{
-                            labelItem.name
-                        }}</router-link>
+                        <router-link :to="labelItem.link">
+                            <span v-html="labelItem.name"></span>
+                        </router-link>
                         <span v-if="index < labelDisplay.length - 1">, </span>
                     </span>
                 </div>
@@ -65,9 +65,9 @@
                         v-for="(genreItem, index) in genresDisplay"
                         :key="index"
                     >
-                        <router-link :to="genreItem.link">{{
-                            genreItem.name
-                        }}</router-link>
+                        <router-link :to="genreItem.link">
+                            <span v-html="genreItem.name"></span>
+                        </router-link>
                         <span v-if="index < genresDisplay.length - 1">, </span>
                     </span>
                 </div>

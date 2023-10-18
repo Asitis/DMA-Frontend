@@ -10,7 +10,7 @@
     overflow: hidden;
 
     &:hover {
-        //transform: scale(1.05);
+        // transform: scale(1.05);
         box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.5);
         z-index: 10;
 
@@ -68,26 +68,24 @@
             padding: 0;
         }
 
-        .artist,
-        .artist span {
+        .artist {
             font-family: 'Roboto Slab';
             font-size: 20px;
             font-weight: 200;
             color: #fff;
             text-decoration: none;
             display: inline;
-        }
-
-        .artistLink {
-            text-decoration: none;
-            color: inherit;
-            opacity: .5;
-
-            &:hover {
-                color: orange;
-                opacity: 1;
+            .artistLink {
                 text-decoration: none;
-            }
+                color: inherit;
+                opacity: .5;
+    
+                &:hover {
+                    color: orange;
+                    opacity: 1;
+                    text-decoration: none;
+                }
+            }    
         }
     }
 
