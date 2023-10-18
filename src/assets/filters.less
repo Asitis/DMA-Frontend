@@ -1,10 +1,12 @@
 .filter {
     margin-right: 15px;
     position: relative;
+
     &:last-child {
         margin-right: 0;
     }
 }
+
 .dropdown {
     position: relative;
     display: inline-block;
@@ -16,7 +18,7 @@
     border-radius: 4px;
     cursor: pointer;
     width: 255px;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     z-index: 10;
     background: #000000;
@@ -29,7 +31,7 @@
     padding: 13px 10px;
     border-radius: 3px;
     background: #000;
-    color: rgba(255,255,255,0.8);
+    color: rgba(255, 255, 255, 0.8);
 
 }
 
@@ -37,7 +39,7 @@
     position: absolute;
     bottom: 100%;
     left: 0;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(3px);
     border-radius: 4px;
     max-height: 200px;
@@ -45,9 +47,9 @@
     z-index: 5;
     width: 100%;
     color: #fff;
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba(0, 0, 0, 0.7);
     box-sizing: border-box;
-    
+
     .dropdown-item {
         display: flex;
         justify-content: space-between;
@@ -55,6 +57,7 @@
         padding: 10px 5px;
         cursor: pointer;
         clear: both;
+
         &:hover {
             background-color: #252525;
         }
@@ -63,8 +66,9 @@
             flex: 1;
             padding: 0 2px;
         }
+
         span.count {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 50px;
             width: 25px;
             height: 25px;
@@ -73,7 +77,7 @@
             align-items: center;
             display: flex;
         }
-    }    
+    }
 }
 
 i.fas {
@@ -82,26 +86,28 @@ i.fas {
 
 @keyframes slideUp {
     from {
-      transform: translateY(100%);
+        transform: translateY(100%);
     }
+
     to {
-      transform: translateY(0);
+        transform: translateY(0);
     }
-  }
-  
-  @keyframes slideDown {
+}
+
+@keyframes slideDown {
     from {
-      transform: translateY(0);
+        transform: translateY(0);
     }
+
     to {
-      transform: translateY(100%);
+        transform: translateY(100%);
     }
-  }
-  
-  .slide-enter-active {
+}
+
+.slide-enter-active {
     animation: slideUp 0.2s forwards;
-  }
-  
-  .slide-leave-active {
+}
+
+.slide-leave-active {
     animation: slideDown 0.2s forwards;
-  }
+}

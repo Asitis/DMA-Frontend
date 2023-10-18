@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     width: calc(25% - 10px);
-    cursor: pointer;
     color: #fff;
     box-sizing: border-box;
     transition: transform .2s;
@@ -14,6 +13,7 @@
         //transform: scale(1.05);
         box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.5);
         z-index: 10;
+
         .card-end {
             margin-bottom: 0px;
         }
@@ -23,6 +23,7 @@
         }
 
     }
+
     .cover-container {
         width: 100%;
         padding-bottom: 100%;
@@ -49,6 +50,7 @@
             transition: all .2s;
         }
     }
+
     .album-content {
         display: flex;
         flex-direction: column;
@@ -58,30 +60,37 @@
         padding: 15px;
         text-align: left;
 
-        h2 { 
+        h2 {
             font-family: 'Roboto Slab';
             font-size: 30px;
             line-height: 32px;
             margin: 0 0 5px 0;
             padding: 0;
         }
-        .artist, .artist span {
+
+        .artist,
+        .artist span {
             font-family: 'Roboto Slab';
             font-size: 20px;
             font-weight: 200;
-            opacity: .5;
             color: #fff;
             text-decoration: none;
-            &:hover { 
-                color: orange; 
-                opacity: 1; 
+            display: inline;
+        }
+
+        .artistLink {
+            text-decoration: none;
+            color: inherit;
+            opacity: .5;
+
+            &:hover {
+                color: orange;
+                opacity: 1;
                 text-decoration: none;
             }
         }
-        .artistLink {
-            text-decoration: none;;
-        }
     }
+
     .card-end {
         background: #000;
         text-align: left;
@@ -94,18 +103,24 @@
         margin-bottom: -200px;
         transition: all .2s;
 
-        label { 
+        label {
             font-weight: bold;
             text-transform: uppercase;
             font-size: 10px;
             color: #666a71;
         }
 
-        a { 
+        a {
             color: inherit;
             text-decoration: none;
-            &:hover {color: orange; }
+
+            &:hover {
+                color: orange;
+            }
         }
     }
 }
-img.cover { width: 100%; }
+
+img.cover {
+    width: 100%;
+}

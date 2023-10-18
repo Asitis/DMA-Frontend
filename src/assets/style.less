@@ -4,48 +4,56 @@
     font-weight: 100;
     src: url('../../public/fonts/RobotoSlab-Thin.ttf') format('truetype');
 }
+
 @font-face {
     font-family: 'Roboto Slab';
     font-style: normal;
     font-weight: 200;
     src: url('../../public/fonts/RobotoSlab-Light.ttf') format('truetype');
 }
+
 @font-face {
     font-family: 'Roboto Slab';
     font-style: normal;
     font-weight: 300;
     src: url('../../public/fonts/RobotoSlab-Regular.ttf') format('truetype');
 }
+
 @font-face {
     font-family: 'Roboto Slab';
     font-style: normal;
     font-weight: 400;
     src: url('../../public/fonts/RobotoSlab-Medium.ttf') format('truetype');
 }
+
 @font-face {
     font-family: 'Roboto Slab';
     font-style: normal;
     font-weight: 500;
     src: url('../../public/fonts/RobotoSlab-SemiBold.ttf') format('truetype');
 }
+
 @font-face {
     font-family: 'Roboto Slab';
     font-style: normal;
     font-weight: 600;
     src: url('../../public/fonts/RobotoSlab-Bold.ttf') format('truetype');
 }
+
 @font-face {
     font-family: 'Roboto Slab';
     font-style: normal;
     font-weight: 700;
     src: url('../../public/fonts/RobotoSlab-SemiBold.ttf') format('truetype');
 }
+
 @font-face {
     font-family: 'Roboto Slab';
     font-style: normal;
     font-weight: 800;
     src: url('../../public/fonts/RobotoSlab-ExtraBold.ttf') format('truetype');
 }
+
 @font-face {
     font-family: 'Roboto Slab';
     font-style: normal;
@@ -53,7 +61,10 @@
     src: url('../../public/fonts/RobotoSlab-Black.ttf') format('truetype');
 }
 
-body { background: #16191c; }
+body {
+    background: #16191c;
+}
+
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -62,6 +73,7 @@ body { background: #16191c; }
     color: #ffffff;
     margin-top: 60px;
 }
+
 #layout {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -69,6 +81,7 @@ body { background: #16191c; }
     text-align: center;
     color: #2c3e50;
 }
+
 .intro-card {
     display: flex;
     flex-direction: column;
@@ -85,33 +98,47 @@ body { background: #16191c; }
         color: #fff;
         text-transform: uppercase;
         text-align: left;
+        word-break: break-all;
     }
-    h3 { 
+
+    h3 {
         text-align: left;
         color: #fff;
         font-size: 25px;
     }
-    p { 
+
+    p {
         text-align: left;
         padding-right: 50px;
     }
+
     .backBtn {
         font-size: 40px;
         text-align: left;
         text-decoration: none;
         color: #ffffff;
     }
-    h1 { font-size: 60px; }
 
-    &.home { h1 { font-size: 65px; } }
+    h1 {
+        font-size: 60px;
+    }
+
+    &.home {
+        h1 {
+            font-size: 65px;
+        }
+    }
 }
-nav { 
+
+nav {
     padding: 30px;
+
     a {
         font-weight: bold;
         color: #2c3e50;
     }
 }
+
 footer {
     background: #0f1113;
     position: fixed;
@@ -124,10 +151,13 @@ footer {
     align-content: flex-start;
     z-index: 100;
 
-    .logo { padding-right: 50px;}
+    .logo {
+        padding-right: 50px;
+    }
 }
+
 .clearfix::after {
     content: "";
     display: table;
     clear: both;
-  }
+}
