@@ -75,17 +75,18 @@
             color: #fff;
             text-decoration: none;
             display: inline;
+
             .artistLink {
                 text-decoration: none;
                 color: inherit;
                 opacity: .5;
-    
+
                 &:hover {
                     color: orange;
                     opacity: 1;
                     text-decoration: none;
                 }
-            }    
+            }
         }
     }
 
@@ -121,4 +122,30 @@
 
 img.cover {
     width: 100%;
+}
+
+@media (max-width: 1280px) {
+    .album-card {
+        width: calc(33% - 10px);
+    }
+}
+
+@media (max-width: 1020px) {
+    #app {
+        width: 90%;
+    }
+
+    .album-card {
+        width: calc(50% - 10px);
+    }
+
+    .card-end {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 570px) {
+    .album-card {
+        width: 100%;
+    }
 }

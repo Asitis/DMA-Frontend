@@ -18,6 +18,7 @@ export default {
             selectedGenre: '',
             selectedLabel: '',
             selectedYear: '',
+            isFooterVisible: true,
         };
     },
     components: {
@@ -33,7 +34,17 @@ export default {
             }
         },
     },
+    computed: {
+        footerMargin() {
+            return this.isFooterVisible ? '0' : '-195px';
+        },
+    },
     methods: {
+        toggleFooter() {
+            if (window.innerWidth <= 1280) {
+                this.isFooterVisible = !this.isFooterVisible;
+            }
+        },
         handleArtistSelected(artist) {
             this.selectedArtist = artist;
         },
@@ -46,7 +57,6 @@ export default {
         handleYearSelected(year) {
             this.selectedYear = year;
         },
-
         clearFilters(except) {
             //console.log('clearfilters called, except ' + except);
             nextTick(() => {
@@ -73,12 +83,36 @@ export default {
             });
             //console.log(this.selectedArtist, this.selectedGenre, this.selectedLabel, this.selectedYear);
         },
+        checkScreenWidth() {
+            if (window.innerWidth <= 1280) {
+                const footer = document.getElementById('footer');
+                if (footer) {
+                    å;
+                    footer.addEventListener('click', this.toggleFooter);
+                }
+                this.isFooterVisible = false;
+            } else {
+                const footer = document.getElementById('footer');
+                if (footer) {
+                    footer.removeEventListener('click', this.toggleFooter);
+                }
+                this.isFooterVisible = true;
+            }
+        },
     },
     created() {
         eventBus.on(CLEAR_FILTERS_EXCEPT, this.clearFilters);
     },
+    mounted() {
+        this.checkScreenWidth();
+        window.addEventListener('resize', this.checkScreenWidth);
+        if (footer) {
+            footer.addEventListener('click', this.toggleFooter, { once: true });
+        }
+    },
     beforeUnmount() {
         eventBus.off(CLEAR_FILTERS_EXCEPT, this.clearFilters);
+        window.removeEventListener('resize', this.checkScreenWidth);
     },
 };
 </script>
@@ -86,7 +120,7 @@ export default {
 <template>
     <div id="layout">
         <RouterView />
-        <footer>
+        <footer id="footer" :style="{ marginBottom: footerMargin }">
             <RouterLink to="/"
                 ><img src="@/assets/logo.svg" class="logo"
             /></RouterLink>
@@ -120,4 +154,7 @@ export default {
 
 <style lang="less">
 @import '@/assets/style.less';
+#footer {
+    transition: margin-bottom 0.3s ease; /* Adjust the duration and easing as needed */
+}
 </style>
