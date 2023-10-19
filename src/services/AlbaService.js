@@ -29,7 +29,7 @@ async function fetchAlbumData(album, endpoint) {
 }
 
 export default {
-    async getAlba(page = 1, perPage = 15) {
+    async getAlba(page = 1, perPage = 30) {
         const response = await apiClient.get('/dma_alba', {
             params: {
                 page: page,

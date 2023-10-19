@@ -40,7 +40,7 @@ import AlbumCard from '@/components/AlbumCard.vue';
 
 const alba = ref([]);
 const page = ref(1);
-const perPage = ref(10);
+const perPage = ref(30);
 let isFetching = false;
 
 onMounted(() => {
