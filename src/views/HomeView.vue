@@ -19,7 +19,17 @@
             </p>
         </div>
         <AlbumCard v-for="album in alba" :key="album.id" :album="album" />
-        <div ref="loadMore" class="load-more"></div>
+        <div ref="loadMore" class="load-more">
+            Loading
+            <div class="loadingio-spinner-disk-v6bdvx4mffa">
+                <div class="spinnerLoader">
+                    <div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -83,6 +93,65 @@ onMounted(() => {
 }
 .load-more {
     min-height: 1px;
-    background-color: transparent;
+    background-color: #28292b;
+    margin: 5px;
+    padding: 20px;
+    color: #fff;
+}
+@keyframes spinnerLoader {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+.spinnerLoader > div > div {
+    position: absolute;
+    border-radius: 50%;
+}
+.spinnerLoader > div > div:nth-child(1) {
+    top: 15px;
+    left: 15px;
+    width: 70px;
+    height: 70px;
+    background: #000000;
+}
+.spinnerLoader > div > div:nth-child(2) {
+    top: 19.900000000000002px;
+    left: 39.5px;
+    width: 21px;
+    height: 21px;
+    background: #ffa600;
+    animation: spinnerLoader 1s linear infinite;
+    transform-origin: 10.5px 30.099999999999998px;
+}
+.loadingio-spinner-disk-v6bdvx4mffa {
+    width: 61px;
+    height: 61px;
+    display: block;
+    overflow: hidden;
+    background: #28292b;
+}
+.spinnerLoader {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: translateZ(0) scale(0.61);
+    backface-visibility: hidden;
+    transform-origin: 0 0; /* see note above */
+}
+.spinnerLoader div {
+    box-sizing: content-box;
+}
+@media (max-width: 1020px) {
+    #app {
+        width: 90%;
+    }
+}
+@media (min-width: 2000px) {
+    #app {
+        width: 98%;
+    }
 }
 </style>
