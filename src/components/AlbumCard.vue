@@ -21,6 +21,10 @@
             />
         </div>
         <div class="album-content">
+            <div v-if="album.content.rendered">
+                <span class="hasMore" @click="openOverlay">&#8943;</span>
+            </div>
+
             <h2 v-html="album.title.rendered"></h2>
             <div class="artist">
                 <span v-for="(artistItem, index) in artistDisplay" :key="index">
@@ -30,7 +34,37 @@
                     <span v-if="index < artistDisplay.length - 1">, </span>
                 </span>
             </div>
+            <div class="overlay" v-if="showOverlay">
+                <div class="context">
+                    This is an old review found in the dusty archives. These
+                    reviews were written somewhere between 2005 and 2015 and
+                    mostly in Dutch.
+                </div>
+                <div class="content">
+                    <h2 v-html="album.title.rendered"></h2>
+                    <div class="artist">
+                        <span
+                            v-for="(artistItem, index) in artistDisplay"
+                            :key="index">
+                            <router-link
+                                class="artistLink"
+                                :to="artistItem.link">
+                                <span v-html="artistItem.name"></span>
+                            </router-link>
+                            <span v-if="index < artistDisplay.length - 1">,
+                            </span>
+                        </span>
+                    </div>
+
+                    <div v-html="album.content.rendered"></div>
+                    <span class="hasMore close" @click="closeOverlay">Close &#10537;</span>
+                </div>
+            </div>
             <p v-if="album.acf">{{ album.acf.notes }}</p>
+            <div v-if="album.content && !album.acf.notes">
+                <span class="badge">old</span>
+                <p v-html="truncatedContent"></p>
+            </div>
         </div>
         <div class="card-end">
             <div class="year">
@@ -81,14 +115,38 @@
 </style>
 
 <script setup>
-import { defineProps, computed } from 'vue';
-
+import { defineProps, computed, ref } from 'vue';
 const props = defineProps({
     album: {
         type: Object,
         required: true,
     },
 });
+
+// Overlay
+const showOverlay = ref(false);
+const openOverlay = () => {
+    showOverlay.value = true;
+};
+const closeOverlay = () => {
+    showOverlay.value = false;
+};
+const maxLength = 300; // Adjust the maximum length as needed
+const truncatedContent = computed(() => {
+    if (props.album.content && !props.album.acf.notes) {
+        const content = props.album.content.rendered;
+
+        if (content.length <= maxLength) {
+            return content;
+        } else {
+            const truncatedText = content.slice(0, maxLength);
+            return truncatedText + '...';
+        }
+    }
+    return ''; // Empty string if no truncated content should be displayed
+});
+
+// Data display
 const artistDisplay = computed(() => {
     return props.album.artist.map((artist) => {
         return {

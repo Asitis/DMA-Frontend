@@ -30,6 +30,8 @@
         height: 0;
         position: relative;
         overflow: hidden;
+        background: url('../assets/noimage.png');
+        background-size: contain;
 
         img.cover {
             position: absolute;
@@ -86,6 +88,51 @@
                     opacity: 1;
                     text-decoration: none;
                 }
+            }
+        }
+
+        .hasMore {
+            background: #0f1113;
+            padding: 5px 10px;
+            border-radius: 5px;
+            float: right;
+            position: absolute;
+            right: 15px;
+            cursor: pointer;
+        }
+
+        .badge {
+            font-size: 10px;
+            background: #ff60002e;
+            padding: 2px 4px;
+            border-radius: 4px;
+            position: absolute;
+            right: 20px;
+            top: 400px;
+        }
+
+        .overlay {
+            background: #000;
+            position: fixed;
+            top: 50px;
+            padding: 80px;
+            width: 50vw;
+            left: 25vw;
+            height: 50vh;
+            overflow-y: scroll;
+            z-index: 1000;
+
+            .context {
+                background: #ff60002e;
+                padding: 10px;
+                font-size: 13px;
+                margin-bottom: 10px;
+            }
+
+            .hasMore.close {
+                position: fixed;
+                top: 30px;
+                right: 20vw;
             }
         }
     }
