@@ -2,8 +2,14 @@
     <div class="alba" ref="albumList">
         <div class="intro-card genre">
             <RouterLink to="/" class="backBtn">&laquo;</RouterLink>
-            <h1><span v-html="genre"></span></h1>
-            <p><span v-html="description"></span></p>
+            <div v-if="genre">
+                <h1><span v-html="genre"></span></h1>
+                <p><span v-html="description"></span></p>
+            </div>
+            <div v-else>
+                <h1>Wut?</h1>
+                <p>Sorry, this genre is not found in my library (yet).</p>
+            </div>
         </div>
 
         <AlbumCard v-for="album in alba" :key="album.id" :album="album" />

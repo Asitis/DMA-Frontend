@@ -171,11 +171,16 @@ export default {
         const artistResponse = await apiClient.get('/artist', {
             params: {
                 search: artistName,
-                per_page: 1,
+                per_page: 10,
             },
         });
 
-        const artist = artistResponse.data[0];
+        const artists = artistResponse.data;
+        if (!artists.length) {
+            throw new Error(`No artist found with name "${artistName}"`);
+        }
+
+        let artist = artists.find(a => a.name.toLowerCase() === artistName.toLowerCase());
         if (!artist) {
             throw new Error(`No artist found with name "${artistName}"`);
         }
@@ -221,11 +226,16 @@ export default {
         const genreResponse = await apiClient.get('/genre', {
             params: {
                 search: genreName,
-                per_page: 1,
+                per_page: 10,
             },
         });
 
-        const genre = genreResponse.data[0];
+        const genres = genreResponse.data;
+        if (!genres.length) {
+            throw new Error(`No genre found with name "${genreName}"`);
+        }
+
+        let genre = genres.find(a => a.name.toLowerCase() === genreName.toLowerCase());
         if (!genre) {
             throw new Error(`No genre found with name "${genreName}"`);
         }
@@ -271,11 +281,16 @@ export default {
         const labelResponse = await apiClient.get('/labels', {
             params: {
                 search: labelName,
-                per_page: 1,
+                per_page: 10,
             },
         });
 
-        const label = labelResponse.data[0];
+        const labels = labelResponse.data;
+        if (!labels.length) {
+            throw new Error(`No label found with name "${labelName}"`);
+        }
+
+        let label = labels.find(a => a.name.toLowerCase() === labelName.toLowerCase());
         if (!label) {
             throw new Error(`No label found with name "${labelName}"`);
         }
