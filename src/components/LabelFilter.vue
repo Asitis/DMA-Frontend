@@ -6,7 +6,7 @@
                     ref="labelInput"
                     type="text"
                     v-model="localSearch"
-                    placeholder="Search labels"
+                    :placeholder="`Search labels (${totalCount})`"
                     @focus="handleInputFocus"
                 />
                 <i class="fas fa-search"></i>
@@ -70,6 +70,9 @@ export default {
                         .indexOf(this.search.toLowerCase()) !== -1
                 );
             });
+        },
+        totalCount() {
+            return this.filteredLabels.length;
         },
     },
     mounted() {

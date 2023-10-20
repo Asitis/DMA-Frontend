@@ -6,7 +6,7 @@
                     ref="artistInput"
                     type="text"
                     v-model="localSearch"
-                    placeholder="Search artist"
+                    :placeholder="`Search artists (${totalCount})`"
                     @focus="handleInputFocus"
                 />
                 <i class="fas fa-search"></i>
@@ -68,6 +68,9 @@ export default {
                         .indexOf(this.search.toLowerCase()) !== -1
                 );
             });
+        },
+        totalCount() {
+            return this.filteredArtists.length;
         },
     },
     mounted() {

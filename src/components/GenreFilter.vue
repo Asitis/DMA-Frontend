@@ -6,7 +6,7 @@
                     ref="genreInput"
                     type="text"
                     v-model="localSearch"
-                    placeholder="Search genres"
+                    :placeholder="`Search genres (${totalCount})`"
                     @focus="handleInputFocus"
                 />
                 <i class="fas fa-search"></i>
@@ -69,6 +69,9 @@ export default {
                         .indexOf(this.search.toLowerCase()) !== -1
                 );
             });
+        },
+        totalCount() {
+            return this.filteredGenres.length;
         },
     },
     mounted() {
