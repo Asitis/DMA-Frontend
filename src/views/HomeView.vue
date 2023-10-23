@@ -83,7 +83,7 @@ onMounted(() => {
 
 <style>
 #app {
-    width: 80%;
+    width: 85%;
     margin: 50px auto 220px;
 }
 .alba {

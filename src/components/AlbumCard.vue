@@ -1,12 +1,9 @@
 <template>
-    <div v-if="album" class="album-card">
+    <div v-if="album" class="album-card" @mouseenter="loadSpotifyWidget">
         <div class="cover-container">
-            <div v-if="album.acf.spotify_uri" class="spotify">
+            <div v-if="showSpotify && props.album.acf.spotify_uri" class="spotify">
                 <iframe
-                    :src="
-                        'https://embed.spotify.com/?uri=' +
-                        album.acf.spotify_uri
-                    "
+                    :src="spotifyUrl"
                     width="100%"
                     height="80"
                     frameborder="0"
@@ -145,6 +142,15 @@ const truncatedContent = computed(() => {
     }
     return ''; // Empty string if no truncated content should be displayed
 });
+
+// Show Spotify
+const spotifyUrl = computed(() => {
+    return `https://embed.spotify.com/?uri=${props.album.acf.spotify_uri}`;
+});
+const showSpotify = ref(false);
+const loadSpotifyWidget = () => {
+    showSpotify.value = true;
+};
 
 // Data display
 const artistDisplay = computed(() => {
