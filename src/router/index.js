@@ -56,7 +56,36 @@ const router = createRouter({
         }
 
     ]
-})
+});
+
+// Set the page title based on the route
+router.beforeEach((to, from, next) => {
+    // Define a default title for your website
+    const baseTitle = 'DeMaandagavond.nl';
+
+    // Determine the route's title based on the route name and parameters
+    let pageTitle = baseTitle;
+
+    if (to.name === 'Artist') {
+        // Set the title for the Artist route with the artist's name
+        pageTitle = `${baseTitle} - ${to.params.name}`;
+    } else if (to.name === 'Year') {
+        // Set the title for the Year route with the year's name
+        pageTitle = `${baseTitle} - ${to.params.name}`;
+    } else if (to.name === 'Genre') {
+        // Set the title for the Genre route with the genre's name
+        pageTitle = `${baseTitle} - ${to.params.name}`;
+    } else if (to.name === 'Label') {
+        // Set the title for the Label route with the label's name
+        pageTitle = `${baseTitle} - ${to.params.name}`;
+    }
+
+    // Update the page title
+    document.title = pageTitle;
+
+    // Continue with the route navigation
+    next();
+});
 
 router.beforeEach((to, from, next) => {
     if (['Artist', 'Genre', 'Label', 'Year'].includes(to.name)) {
