@@ -64,8 +64,8 @@ onMounted(() => {
     function observeLoadMore() {
         const options = {
             root: null,
-            rootMargin: '0px',
-            threshold: 1.0,
+            rootMargin: '300px 0px 300px 0px',
+            threshold: 0.1,
         };
         const observer = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting && !isFetching) {
