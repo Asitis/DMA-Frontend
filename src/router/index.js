@@ -68,16 +68,16 @@ router.beforeEach((to, from, next) => {
 
     if (to.name === 'Artist') {
         // Set the title for the Artist route with the artist's name
-        pageTitle = `${baseTitle} - ${to.params.name}`;
+        pageTitle = `${to.params.name} - ${baseTitle}`;
     } else if (to.name === 'Year') {
         // Set the title for the Year route with the year's name
-        pageTitle = `${baseTitle} - ${to.params.name}`;
+        pageTitle = `${to.params.name} - ${baseTitle}`;
     } else if (to.name === 'Genre') {
         // Set the title for the Genre route with the genre's name
-        pageTitle = `${baseTitle} - ${to.params.name}`;
+        pageTitle = `${to.params.name} - ${baseTitle}`;
     } else if (to.name === 'Label') {
         // Set the title for the Label route with the label's name
-        pageTitle = `${baseTitle} - ${to.params.name}`;
+        pageTitle = `${to.params.name} - ${baseTitle}`;
     }
 
     // Update the page title
