@@ -8,12 +8,6 @@ const apiClient = axios.create({
         'Content-Type': 'application/json'
     }
 });
-// apiClient.interceptors.request.use((config) => {
-//   console.log(`Axios is calling URL: ${config.baseURL}${config.url} with parameters:`, config.params);
-//   return config;
-// }, (error) => {
-//   return Promise.reject(error);
-// });
 
 // Helper function to retrieve additional album data
 async function fetchAlbumData(album, endpoint) {
@@ -27,6 +21,8 @@ async function fetchAlbumData(album, endpoint) {
         return apiClient.get(`/${endpoint}/${id}`).then((response) => response.data.name);
     }
 }
+
+let cachedGenre = null; // Cache the genre info here
 
 export default {
     async getAlba(page = 1, perPage = 30) {
@@ -59,7 +55,6 @@ export default {
 
         return Promise.all(albumPromises);
     },
-
     async getArtists() {
         let allArtists = [];
         let currentPage = 1;
@@ -222,30 +217,29 @@ export default {
             alba: alba,
         };
     },
-    async getAlbumsByGenre(genreName) {
-        const genreResponse = await apiClient.get('/genre', {
-            params: {
-                search: genreName,
-                per_page: 10,
-            },
-        });
+    async getAlbumsByGenre(genreName, page = 1, perPage = 30) {
+        if (!cachedGenre || page === 1) {
+            const genreResponse = await apiClient.get('/genre', {
+                params: {
+                    search: genreName,
+                    page: page,
+                    per_page: perPage,
+                },
+            });
+            if (!genreResponse.data.length) { throw new Error(`No genre found with name "${genreName}"`); }
 
-        const genres = genreResponse.data;
-        if (!genres.length) {
-            throw new Error(`No genre found with name "${genreName}"`);
+            cachedGenre = genreResponse.data.find(g => g.name.toLowerCase() === genreName.toLowerCase());
+            if (!cachedGenre) { throw new Error(`No genre found with name "${genreName}"`); }
         }
 
-        let genre = genres.find(a => a.name.toLowerCase() === genreName.toLowerCase());
-        if (!genre) {
-            throw new Error(`No genre found with name "${genreName}"`);
-        }
-
-        const albumsResponse = await apiClient.get('/dma_alba', {
+        const albumsResponse = await apiClient.get('dma_alba', {
             params: {
-                genre: genre.id,
+                genre: cachedGenre.id,
+                page: page,
+                per_page: perPage
             },
         });
-
+    
         const albumPromises = albumsResponse.data.map(async (album) => {
             const [genres, artist, jaren, labels, featuredImageUrl] = await Promise.all([
                 fetchAlbumData(album, 'genre'),
@@ -256,23 +250,29 @@ export default {
                     ? apiClient.get(`/media/${album.featured_media}`).then((response) => response.data.source_url)
                     : null,
             ]);
-
+    
             album.genres = genres;
             album.jaren = jaren;
             album.labels = labels;
             album.artist = artist;
             album.featuredImageUrl = featuredImageUrl;
-
+    
             return album;
         });
-
+    
         const alba = await Promise.all(albumPromises);
-
+        const artist = alba.length > 0 ? alba[0].artist : { name: '', count: 0, description: '' };
+    
         return {
             genre: {
-                name: genre.name,
-                count: genre.count,
-                description: genre.description,
+                name: cachedGenre.name,
+                count: cachedGenre.count,
+                description: cachedGenre.description,
+            },    
+            artist: {
+                name: artist.name,
+                count: artist.count,
+                description: artist.description,
             },
             alba: alba,
         };
