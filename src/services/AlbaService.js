@@ -34,11 +34,12 @@ export default {
         });
 
         const albumPromises = response.data.map(async (album) => {
-            const [genres, artist, jaren, labels, featuredImageUrl] = await Promise.all([
+            const [genres, artist, jaren, labels, tags, featuredImageUrl] = await Promise.all([
                 fetchAlbumData(album, 'genre'),
                 fetchAlbumData(album, 'artist'),
                 fetchAlbumData(album, 'jaren'),
                 fetchAlbumData(album, 'labels'),
+                fetchAlbumData(album, 'tags'),
                 album.featured_media
                     ? apiClient.get(`/media/${album.featured_media}`).then((response) => response.data.source_url)
                     : null,
@@ -48,7 +49,10 @@ export default {
             album.jaren = jaren;
             album.labels = labels;
             album.artist = artist;
+            album.tags = tags;
             album.featuredImageUrl = featuredImageUrl;
+
+            //console.log('Fetched tags:', tags); // Add this log to check tags data
 
             return album;
         });
@@ -162,6 +166,33 @@ export default {
         }
         return allYears;
     },
+    async getTags() {
+        let allTags = [];
+        let currentPage = 1;
+
+        try {
+            let hasMore = false;
+            do {
+                const response = await apiClient.get('/tags', {
+                    params: {
+                        per_page: 100,
+                        page: currentPage,
+                    },
+                });
+                allTags = [...allTags, ...response.data.map(tag => {
+                    return {
+                        name: tag.name,
+                        count: tag.count,
+                    };
+                })];
+                hasMore = response.data.length === 100;
+                currentPage++;
+            } while (hasMore);
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
+        return allTags;
+    },
     async getAlbumsByArtist(artistName) {
         const artistResponse = await apiClient.get('/artist', {
             params: {
@@ -187,11 +218,12 @@ export default {
         });
 
         const albumPromises = albumsResponse.data.map(async (album) => {
-            const [genres, artist, jaren, labels, featuredImageUrl] = await Promise.all([
+            const [genres, artist, jaren, labels, tags, featuredImageUrl] = await Promise.all([
                 fetchAlbumData(album, 'genre'),
                 fetchAlbumData(album, 'artist'),
                 fetchAlbumData(album, 'jaren'),
                 fetchAlbumData(album, 'labels'),
+                fetchAlbumData(album, 'tags'),
                 album.featured_media
                     ? apiClient.get(`/media/${album.featured_media}`).then((response) => response.data.source_url)
                     : null,
@@ -200,6 +232,7 @@ export default {
             album.genres = genres;
             album.jaren = jaren;
             album.labels = labels;
+            album.tags = tags;
             album.artist = artist;
             album.featuredImageUrl = featuredImageUrl;
 
@@ -241,11 +274,12 @@ export default {
         });
     
         const albumPromises = albumsResponse.data.map(async (album) => {
-            const [genres, artist, jaren, labels, featuredImageUrl] = await Promise.all([
+            const [genres, artist, jaren, labels, tags, featuredImageUrl] = await Promise.all([
                 fetchAlbumData(album, 'genre'),
                 fetchAlbumData(album, 'artist'),
                 fetchAlbumData(album, 'jaren'),
                 fetchAlbumData(album, 'labels'),
+                fetchAlbumData(album, 'tags'),
                 album.featured_media
                     ? apiClient.get(`/media/${album.featured_media}`).then((response) => response.data.source_url)
                     : null,
@@ -254,6 +288,7 @@ export default {
             album.genres = genres;
             album.jaren = jaren;
             album.labels = labels;
+            album.tags = tags;
             album.artist = artist;
             album.featuredImageUrl = featuredImageUrl;
     
@@ -302,11 +337,12 @@ export default {
         });
 
         const albumPromises = albumsResponse.data.map(async (album) => {
-            const [genres, artist, jaren, labels, featuredImageUrl] = await Promise.all([
+            const [genres, artist, jaren, labels, tags, featuredImageUrl] = await Promise.all([
                 fetchAlbumData(album, 'genre'),
                 fetchAlbumData(album, 'artist'),
                 fetchAlbumData(album, 'jaren'),
                 fetchAlbumData(album, 'labels'),
+                fetchAlbumData(album, 'tags'),
                 album.featured_media
                     ? apiClient.get(`/media/${album.featured_media}`).then((response) => response.data.source_url)
                     : null,
@@ -315,6 +351,7 @@ export default {
             album.genres = genres;
             album.jaren = jaren;
             album.labels = labels;
+            album.tags = tags;
             album.artist = artist;
             album.featuredImageUrl = featuredImageUrl;
 
@@ -328,6 +365,63 @@ export default {
                 name: label.name,
                 count: label.count,
                 description: label.description,
+            },
+            alba: alba,
+        };
+    },
+    async getAlbumsByTag(tagName) {
+        const tagResponse = await apiClient.get('/tags', {
+            params: {
+                search: tagName,
+                per_page: 10,
+            },
+        });
+
+        const tags = tagResponse.data;
+        if (!tags.length) {
+            throw new Error(`No tag found with name "${tagName}"`);
+        }
+
+        let tag = tags.find(a => a.name.toLowerCase() === tagName.toLowerCase());
+        if (!tag) {
+            throw new Error(`No tag found with name "${tagName}"`);
+        }
+
+        const albumsResponse = await apiClient.get('/dma_alba', {
+            params: {
+                tags: tag.id,
+            },
+        });
+
+        const albumPromises = albumsResponse.data.map(async (album) => {
+            const [genres, artist, jaren, labels, tags, featuredImageUrl] = await Promise.all([
+                fetchAlbumData(album, 'genre'),
+                fetchAlbumData(album, 'artist'),
+                fetchAlbumData(album, 'jaren'),
+                fetchAlbumData(album, 'labels'),
+                fetchAlbumData(album, 'tags'),
+                album.featured_media
+                    ? apiClient.get(`/media/${album.featured_media}`).then((response) => response.data.source_url)
+                    : null,
+            ]);
+
+            album.genres = genres;
+            album.jaren = jaren;
+            album.labels = labels;
+            album.tags = tags;
+            album.artist = artist;
+            album.featuredImageUrl = featuredImageUrl;
+
+            return album;
+        });
+
+        const alba = await Promise.all(albumPromises);
+
+        return {
+            tag: {
+                name: tag.name,
+                count: tag.count,
+                description: tag.description,
             },
             alba: alba,
         };
@@ -352,11 +446,12 @@ export default {
         });
 
         const albumPromises = albumsResponse.data.map(async (album) => {
-            const [genres, artist, jaren, labels, featuredImageUrl] = await Promise.all([
+            const [genres, artist, jaren, labels, tags, featuredImageUrl] = await Promise.all([
                 fetchAlbumData(album, 'genre'),
                 fetchAlbumData(album, 'artist'),
                 fetchAlbumData(album, 'jaren'),
                 fetchAlbumData(album, 'labels'),
+                fetchAlbumData(album, 'tags'),
                 album.featured_media
                     ? apiClient.get(`/media/${album.featured_media}`).then((response) => response.data.source_url)
                     : null,
@@ -365,6 +460,7 @@ export default {
             album.genres = genres;
             album.jaren = jaren;
             album.labels = labels;
+            album.tags = tags;
             album.artist = artist;
             album.featuredImageUrl = featuredImageUrl;
 

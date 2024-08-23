@@ -103,6 +103,16 @@
                     </span>
                 </div>
             </div>
+            <div v-if="album.tags" class="tags">
+                <div>
+                    <label>Tags: </label>
+                    <span v-for="(tagItem, index) in tagDisplay" :key="index">
+                        <router-link :to="{ name: 'Tag', params: { name: tagItem.name } }">
+                            <span class="pre">#</span> <span v-html="tagItem.name"></span>
+                        </router-link>
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -174,6 +184,14 @@ const labelDisplay = computed(() => {
         return {
             name: label,
             link: { name: 'Label', params: { name: label } },
+        };
+    });
+});
+const tagDisplay = computed(() => {
+    return props.album.tags.map((tag) => {
+        return {
+            name: tag,
+            link: { name: 'Tag', params: { name: tag } },
         };
     });
 });

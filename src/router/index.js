@@ -4,6 +4,7 @@ import HomeView from '@/views/HomeView.vue'
 import Artist from '@/views/ArtistView.vue'
 import Genre from '@/views/GenreView.vue'
 import Label from '@/views/LabelView.vue'
+import Tag from '@/views/TagView.vue'
 import Year from '@/views/YearView.vue'
 
 const router = createRouter({
@@ -45,6 +46,16 @@ const router = createRouter({
             component: Label
         },
         {
+            path: '/tag',
+            name: 'tag',
+            component: () => import('../views/TagView.vue')
+        },
+        {
+            path: '/tag/:name',
+            name: 'Tag',
+            component: Tag
+        },
+        {
             path: '/year',
             name: 'year',
             component: () => import('../views/YearView.vue')
@@ -78,6 +89,9 @@ router.beforeEach((to, from, next) => {
     } else if (to.name === 'Label') {
         // Set the title for the Label route with the label's name
         pageTitle = `${to.params.name} - ${baseTitle}`;
+    } else if (to.name === 'Tag') {
+        // Set the title for the Tag route with the tag's name
+        pageTitle = `${to.params.name} - ${baseTitle}`;
     }
 
     // Update the page title
@@ -88,7 +102,7 @@ router.beforeEach((to, from, next) => {
 });
 
 router.beforeEach((to, from, next) => {
-    if (['Artist', 'Genre', 'Label', 'Year'].includes(to.name)) {
+    if (['Artist', 'Genre', 'Label', 'Tag', 'Year'].includes(to.name)) {
         eventBus.emit('clear-filters');
     }
     next();
