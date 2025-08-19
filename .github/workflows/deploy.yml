@@ -1,0 +1,83 @@
+name: Deploy Vue Frontend
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install Dependencies
+      run: npm ci
+      
+    - name: Build Vue App
+      run: npm run build
+      
+    - name: Setup SSH Key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+        
+    - name: Verify Target Paths Exist
+      run: |
+        ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "
+          # Verify base path exists
+          if [ ! -d '${{ secrets.VPS_PATH }}' ]; then
+            echo '❌ WordPress path does not exist: ${{ secrets.VPS_PATH }}'
+            exit 1
+          fi
+          
+          # Create vue directory if it doesn't exist
+          mkdir -p '${{ secrets.VPS_PATH }}/vue'
+          
+          echo '✅ Vue deployment paths verified'
+        "
+        
+    - name: Deploy Vue Frontend
+      run: |
+        # Deploy the built dist folder to vue/dist on server
+        rsync -avz --no-times --no-perms --delete \
+          ./dist/ \
+          ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:'${{ secrets.VPS_PATH }}/vue/dist/'
+        echo '✅ Vue frontend deployed'
+        
+    # - name: Set Correct Permissions
+    #   run: |
+    #     ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "
+    #       # Ensure www-data can read the files
+    #       sudo chown -R alextimmer:www-data '${{ secrets.VPS_PATH }}/vue/'
+    #       sudo find '${{ secrets.VPS_PATH }}/vue/' -type f -exec chmod 644 {} \\;
+    #       sudo find '${{ secrets.VPS_PATH }}/vue/' -type d -exec chmod 755 {} \\;
+    #       echo '✅ Permissions set for Vue frontend'
+    #     "
+        
+    - name: Verify Deployment Success
+      run: |
+        ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "
+          echo '🔍 Verifying Vue deployment...'
+          
+          # Check if index.html exists
+          if [ -f '${{ secrets.VPS_PATH }}/vue/dist/index.html' ]; then
+            echo '✅ Vue frontend deployed successfully'
+            ls -la '${{ secrets.VPS_PATH }}/vue/dist/' | head -5
+          else
+            echo '❌ Vue frontend deployment failed'
+            exit 1
+          fi
+          
+          # Show build info
+          echo '📦 Build contents:'
+          ls -la '${{ secrets.VPS_PATH }}/vue/dist/'
+        "
